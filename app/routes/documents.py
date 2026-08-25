@@ -9,6 +9,7 @@ from app.services.embedding import embed_question
 from app.services.storage import save_chunks
 from app.services.storage import search_similar_chunks
 from app.schemas import QuestionRequest
+from app.services.generation import build_prompt, call_claude
 import uuid
 
 router = APIRouter()
@@ -34,4 +35,6 @@ async def upload_document(file: UploadFile = File(...)):
 def ask_question(request: QuestionRequest):
     question_embedding = embed_question(request.question)
     top_chunks = search_similar_chunks(question_embedding)
-    return {"top_chunks": top_chunks}
+    prompt = build_prompt(top_chunks, request.question)
+    answer = call_claude(prompt)
+    return {"answer": answer}
