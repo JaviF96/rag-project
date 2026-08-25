@@ -4,9 +4,6 @@ import os
 
 def get_connection():
     conn = psycopg2.connect(os.environ.get("DATABASE_URL"))
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM pg_extension WHERE extname = 'vector';")
-    print(cur.fetchall())
     register_vector(conn)
     return conn
 
@@ -23,3 +20,19 @@ def save_chunks(document_id: str, chunks: list[str], embeddings: list[list[float
     conn.commit() 
     cursor.close()
     conn.close()
+
+
+def search_similar_chunks(question_embedding: list[float], top_k: int = 3) -> list[str]:
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT chunk_text FROM chunks ORDER BY embedding <-> %s::vector LIMIT %s",
+        (question_embedding, top_k)
+    )
+
+    results = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    return [row[0] for row in results]
