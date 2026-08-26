@@ -22,7 +22,7 @@ def save_chunks(document_id: str, chunks: list[str], embeddings: list[list[float
     conn.close()
 
 
-def search_similar_chunks(question_embedding: list[float], top_k: int = 3) -> list[tuple[str, str]]:
+def search_similar_chunks(question_embedding: list[float], top_k: int = 6) -> list[tuple[str, str]]:
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -37,7 +37,7 @@ def search_similar_chunks(question_embedding: list[float], top_k: int = 3) -> li
 
     return results
 
-def search_keyword_chunks(question:str, top_k:int=3) -> list[tuple[str, str]]:
+def search_keyword_chunks(question:str, top_k:int=6) -> list[tuple[str, str]]:
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -58,7 +58,7 @@ def search_keyword_chunks(question:str, top_k:int=3) -> list[tuple[str, str]]:
     return results
 
 
-def combine_with_rrf(vector_results: list[tuple], keyword_results: list[tuple], k: int = 60, top_k: int =3) -> list[str]:
+def combine_with_rrf(vector_results: list[tuple], keyword_results: list[tuple], k: int = 60, top_k: int = 6) -> list[str]:
     vector_ranks = {doc_id: rank for rank, (doc_id, _) in enumerate(vector_results, start=1)}
     keyword_ranks = {doc_id: rank for rank, (doc_id, _) in enumerate(keyword_results, start=1)}
 
