@@ -19,4 +19,7 @@ def call_claude(prompt: str) -> str:
         max_tokens=1024,
         messages=[{"role": "user", "content": prompt}]
     )
-    return response.content[0].text
+    for block in response.content:
+        if block.type == "text":
+            return block.text
+    return ""
