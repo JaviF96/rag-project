@@ -77,6 +77,6 @@ def combine_with_rrf(vector_results: list[tuple], keyword_results: list[tuple], 
 
     sorted_chunks = sorted(rrf_scores.items(), key=lambda item: item[1], reverse=True)
 
-    top_chunks = [chunk_texts[doc_id] for doc_id, _ in sorted_chunks[:top_k]]
-
+    top_chunks = [(doc_id, chunk_texts[doc_id]) for doc_id, _ in sorted_chunks[:top_k]]
+    
     return top_chunks

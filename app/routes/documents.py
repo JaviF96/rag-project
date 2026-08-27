@@ -42,6 +42,6 @@ def ask_question(request: QuestionRequest):
 
     reranked_chunks = rerank_chunks(request.question, fused_chunks, top_k=final_k)
 
-    prompt = build_prompt(reranked_chunks, request.question)
+    prompt = build_prompt([text for _, text in reranked_chunks], request.question)
     answer = call_claude(prompt)
-    return {"answer": answer, "top_chunks": reranked_chunks, "top_chunks_vector": top_chunks_vector, "top_chunks_keyword": top_chunks_keyword}
+    return {"answer": answer, "top_chunks": [text for _, text in reranked_chunks], "top_chunk_ids": [doc_id for doc_id, _ in reranked_chunks]}

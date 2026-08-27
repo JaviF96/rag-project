@@ -10,7 +10,8 @@ def embed_question(question:str) -> list[float]:
     result = client.embed([question], model="voyage-4", input_type="query")
     return result.embeddings[0]
 
-def rerank_chunks(question:str, chunks:list[str], top_k: int =3) -> list[str]:
-    result = client.rerank(question, chunks, model="rerank-2.5", top_k=top_k)
-    return [r.document for r in result.results]
+def rerank_chunks(question: str, chunks: list[tuple], top_k: int = 3) -> list[tuple]:
+    chunk_texts = [text for _, text in chunks]
+    result = client.rerank(question, chunk_texts, model="rerank-2.5", top_k=top_k)
+    return [chunks[r.index] for r in result.results]
 
