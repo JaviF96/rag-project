@@ -1,5 +1,5 @@
 import json
-from app.services.generation import call_claude
+from app.services.generation import call_claude, parse_json_response
 
 
 def build_judge_prompt(question: str, reference_answer: str, system_answer: str) -> str:
@@ -20,10 +20,7 @@ def judge_answer(question: str, reference_answer: str, system_answer: str) -> di
     prompt = build_judge_prompt(question, reference_answer, system_answer)
     response_text = call_claude(prompt)
     
-    cleaned_text = response_text.strip()
-    if cleaned_text.startswith("```"):
-        lines = cleaned_text.split("\n")
-        cleaned_text = "\n".join(lines[1:-1])
+    cleaned_text = parse_json_response(response_text)
 
     try:
         return json.loads(cleaned_text)

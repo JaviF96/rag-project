@@ -1,4 +1,5 @@
-from dotenv import load_dotenv 
+from dotenv import load_dotenv
+
 load_dotenv()  
 
 from fastapi import APIRouter, HTTPException, UploadFile, File
@@ -8,6 +9,8 @@ from app.services.embedding import embed_chunks, embed_question, rerank_chunks
 from app.services.storage import combine_with_rrf, save_chunks, search_similar_chunks, search_keyword_chunks
 from app.schemas import QuestionRequest
 from app.services.generation import build_prompt, call_claude
+from app.services.verification import verify_answer 
+
 import uuid
 
 router = APIRouter()
@@ -44,4 +47,11 @@ def ask_question(request: QuestionRequest):
 
     prompt = build_prompt([text for _, text in reranked_chunks], request.question)
     answer = call_claude(prompt)
+
+    verification = verify_answer([text for _, text in reranked_chunks], answer)
+
+    if not verification["grounded"]:
+        retry_prompt = prompt + f"\n\n Note: A previous attempt at this answer had an issue: {verification['reasoning']}. Re examine the context carefully before trying again."
+        answer = call_claude(retry_prompt)
+
     return {"answer": answer, "top_chunks": [text for _, text in reranked_chunks], "top_chunk_ids": [doc_id for doc_id, _ in reranked_chunks]}
