@@ -20,9 +20,4 @@ def judge_answer(question: str, reference_answer: str, system_answer: str) -> di
     prompt = build_judge_prompt(question, reference_answer, system_answer)
     response_text = call_claude(prompt)
     
-    cleaned_text = parse_json_response(response_text)
-
-    try:
-        return json.loads(cleaned_text)
-    except json.JSONDecodeError:
-        return {"verdict": "error", "reasoning": f"Failed to parse JSON from the model's response. Raw response: {cleaned_text}"}
+    return parse_json_response(response_text)

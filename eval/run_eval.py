@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 load_dotenv()
 
+import json
 from eval.golden_dataset import GOLDEN_DATASET
 from eval.pipeline_runner import run_pipeline
 from eval.scoring import score_retrieval
@@ -28,6 +29,7 @@ def run_evaluation():
             "answer": pipeline_result["answer"],
             "retrieval": retrieval_score,
             "judge": judge_result,
+            "trace": pipeline_result["trace"]
         })
 
     return results
@@ -48,6 +50,11 @@ def print_report(results: list):
         print(f"\nQ: {r['question']}")
         print(f"   Retrieval full recall: {r['retrieval']['full_recall']}  (positions: {r['retrieval']['positions']})")
         print(f"   Judge verdict: {r['judge'].get('verdict')} — {r['judge'].get('reasoning')}")
+        print(f"   Vector chunk IDs: {r['trace']['vector_chunk_ids']}")
+        print(f"   Keyword chunk IDs: {r['trace']['keyword_chunk_ids']}")
+        print(f"   Fused chunk IDs: {r['trace']['fused_chunk_ids']}")
+        print(f"   Verification: {r['trace']['verification']['grounded']} ({r['trace']['verification']['issue']})")
+        print(f"   Retried: {r['trace']['retried']}")
 
     print("\n" + "=" * 60)
     print("SUMMARY")
@@ -55,6 +62,8 @@ def print_report(results: list):
     print(f"Retrieval full recall: {full_recall_count}/{total} ({full_recall_count/total:.0%})")
     for verdict, count in verdict_counts.items():
         print(f"Judge verdict '{verdict}': {count}/{total} ({count/total:.0%})")
+
+    json.dump(results, open("eval/results.json", "w"), indent=2)
 
 if __name__ == "__main__":
     results = run_evaluation()

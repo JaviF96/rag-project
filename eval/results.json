@@ -1,0 +1,597 @@
+[
+  {
+    "question": "How many vacation days does an employee accrue annually if they were hired in 2017?",
+    "answer": "An employee hired in 2017 would be on the **Legacy PTO Plan** (since they were hired before January 2019), unless they voluntarily opted into FTO in writing. Under the Legacy PTO Plan, they would accrue **24 days annually** (2 days per month).",
+    "retrieval": {
+      "full_recall": true,
+      "positions": {
+        "4": 1
+      }
+    },
+    "judge": {
+      "verdict": "correct",
+      "reasoning": "System's answer matches the reference: Legacy PTO Plan, 24 days annually (2 days/month) due to 2017 hire predating the 2019 cutoff, with an accurate additional note about opting into FTO."
+    },
+    "trace": {
+      "vector_chunk_ids": [
+        "increases and the annual bonus are evaluated separately and one does not guarantee the other. 3. Time Off Policies 3.1 Flexible Time Off (FTO) Full-time employees hired on or after January 2019 accrue Flexible Time Off (FTO) rather than traditional PTO. FTO is accrued at a rate of 1.5 days per month, totaling 18 days annually for a full-time employee, and may be used for vacation, personal matters, or short-term illness of less than three consecutive days. FTO does not roll over between calendar years, and unused balances are not paid out upon departure except where required by local law. 3.2 Legacy PTO Plan Employees hired before January 2019 remain on the legacy Paid Time Off (PTO) plan unless they have voluntarily opted into FTO in writing. The legacy plan accrues at 2 days per month, totaling 24 days annually, and does not combine sick leave with vacation time \u2014",
+        "to leveled pay bands that are reviewed annually against external market data. Employees may request a summary of their pay band placement from their manager or People Operations at any time. All full-time employees in good standing are eligible for the annual performance bonus, paid each March, equal to up to 10% of base salary depending on individual and company performance that year. Bonus percentages are communicated individually and are not guaranteed to be uniform across teams. Part-time and contract employees are not eligible for the annual bonus program under any circumstances. Annual merit increases, where applicable, are effective each July and are communicated alongside the employee's midyear check-in. Merit increases and the annual bonus are evaluated separately and one does not guarantee the other. 3. Time Off Policies 3.1 Flexible Time Off (FTO) Full-time employees hired on or after January 2019 accrue Flexible Time Off (FTO) rather than traditional",
+        "on the legacy Paid Time Off (PTO) plan unless they have voluntarily opted into FTO in writing. The legacy plan accrues at 2 days per month, totaling 24 days annually, and does not combine sick leave with vacation time \u2014 sick leave under the legacy plan is tracked separately, as described in section 3.3. 3.3 Extended Sick Leave Employees who are ill for three or more consecutive days must use Extended Sick Leave rather than FTO or legacy PTO. Extended Sick Leave provides up to 10 paid days per calendar year and may require a physician's note for absences longer than five consecutive days. Extended Sick Leave is available to all full-time employees regardless of which time-off plan they are otherwise enrolled in. 3.4 Bereavement Leave Employees may take up to 5 paid days of bereavement leave following the death of an immediate family member, defined as a spouse, domestic",
+        "leave allowances outlined in Section 3 are extended to 10 paid days for immediately affected team members, in addition to mandatory access to EAP counseling resources during the affected period. People Operations will coordinate directly with affected employees regarding this extension; it is not applied automatically through standard leave request systems.",
+        "on an active PIP are not eligible for the annual performance bonus described in Section 2, nor for consideration in the mid-year promotion cycle, until the PIP has been successfully closed by their manager. 8. New Hire Orientation & Company Resources During their first week, new hires meet with People Operations to review benefits enrollment, complete required compliance training, and are introduced to available support resources, including the Employee Assistance Program (EAP) confidential counseling line and the internal mentorship program, which pairs new hires with a peer outside their immediate team for their first six months. 9. Special Circumstances In the rare event of a workplace-related fatality, all standard bereavement leave allowances outlined in Section 3 are extended to 10 paid days for immediately affected team members, in addition to mandatory access to EAP counseling resources during the affected period. People Operations will coordinate directly with affected employees regarding this",
+        "within 12 months of the birth, adoption, or foster placement of a child. 3.6 Jury Duty Employees summoned for jury duty will be paid their regular salary for the duration of their service, with no cap on the number of days, provided proof of summons is submitted to People Operations. 4. Benefits Meridian offers medical, dental, and vision coverage to all full-time employees, effective on the first day of the month following hire. The company covers 80% of the premium for employee-only coverage and 60% of the premium for dependent coverage. Meridian matches 401(k) contributions dollar-for-dollar up to 4% of an employee's base salary. Matching contributions vest immediately and are deposited each pay period alongside the employee's own contribution. All employees and their household members have access to the company's EAP, which provides confidential counseling sessions, financial planning consultations, and legal referrals at no cost. The EAP can be reached"
+      ],
+      "keyword_chunk_ids": [],
+      "fused_chunk_ids": [
+        4,
+        3,
+        5,
+        13,
+        12,
+        7
+      ],
+      "reranked_chunk_ids": [
+        4,
+        5,
+        3
+      ],
+      "first_answer": "An employee hired in 2017 would be on the **Legacy PTO Plan** (since they were hired before January 2019), unless they voluntarily opted into FTO in writing. Under the Legacy PTO Plan, they would accrue **24 days annually** (2 days per month).",
+      "verification": {
+        "grounded": true,
+        "issue": "none",
+        "reasoning": "The answer correctly states that an employee hired in 2017 would be on the Legacy PTO Plan unless opted into FTO, accruing 24 days annually (2 days/month), which matches the context exactly."
+      },
+      "retried": false
+    }
+  },
+  {
+    "question": "What percentage of base salary is the annual performance bonus, and when is it paid?",
+    "answer": "The annual performance bonus is up to 10% of base salary, depending on individual and company performance that year, and it is paid each March.",
+    "retrieval": {
+      "full_recall": true,
+      "positions": {
+        "3": 1
+      }
+    },
+    "judge": {
+      "verdict": "correct",
+      "reasoning": "The system's answer matches the reference: up to 10% of base salary, paid each March, with additional consistent detail about performance dependency."
+    },
+    "trace": {
+      "vector_chunk_ids": [
+        "to leveled pay bands that are reviewed annually against external market data. Employees may request a summary of their pay band placement from their manager or People Operations at any time. All full-time employees in good standing are eligible for the annual performance bonus, paid each March, equal to up to 10% of base salary depending on individual and company performance that year. Bonus percentages are communicated individually and are not guaranteed to be uniform across teams. Part-time and contract employees are not eligible for the annual bonus program under any circumstances. Annual merit increases, where applicable, are effective each July and are communicated alongside the employee's midyear check-in. Merit increases and the annual bonus are evaluated separately and one does not guarantee the other. 3. Time Off Policies 3.1 Flexible Time Off (FTO) Full-time employees hired on or after January 2019 accrue Flexible Time Off (FTO) rather than traditional",
+        "through the Expense Portal within 30 days of the expense date. Reports submitted after this window will not be reimbursed except in cases of documented travel delays or system outages affecting the Expense Portal itself. 7. Performance Management Formal performance reviews occur annually each October, with informal check-ins recommended on a quarterly basis between employees and their managers. Review outcomes feed into the following July's merit increase cycle described in Section 2. Employees whose performance falls below expectations may be placed on a Performance Improvement Plan (PIP) by their manager, in consultation with People Operations. A PIP typically runs for 60 to 90 days and includes specific, measurable goals. Employees on an active PIP are not eligible for the annual performance bonus described in Section 2, nor for consideration in the mid-year promotion cycle, until the PIP has been successfully closed by their manager. 8. New Hire Orientation & Company",
+        "Meridian employees. It is reviewed annually by People Operations and Legal, and employees are notified by email whenever a material change is made. Meridian's culture is built around three principles: craftsmanship, accountability, and mutual trust. We expect every employee to take ownership of their work, communicate openly about setbacks, and treat colleagues with the same care they would want extended to themselves. These principles inform how we approach everything from performance management to time off, and they are referenced throughout this handbook. 2. Compensation & Pay Structure Meridian pays all employees on a semi-monthly basis, on the 15th and last business day of each month. Base salaries are set according to leveled pay bands that are reviewed annually against external market data. Employees may request a summary of their pay band placement from their manager or People Operations at any time. All full-time employees in good standing are eligible for",
+        "on an active PIP are not eligible for the annual performance bonus described in Section 2, nor for consideration in the mid-year promotion cycle, until the PIP has been successfully closed by their manager. 8. New Hire Orientation & Company Resources During their first week, new hires meet with People Operations to review benefits enrollment, complete required compliance training, and are introduced to available support resources, including the Employee Assistance Program (EAP) confidential counseling line and the internal mentorship program, which pairs new hires with a peer outside their immediate team for their first six months. 9. Special Circumstances In the rare event of a workplace-related fatality, all standard bereavement leave allowances outlined in Section 3 are extended to 10 paid days for immediately affected team members, in addition to mandatory access to EAP counseling resources during the affected period. People Operations will coordinate directly with affected employees regarding this",
+        "increases and the annual bonus are evaluated separately and one does not guarantee the other. 3. Time Off Policies 3.1 Flexible Time Off (FTO) Full-time employees hired on or after January 2019 accrue Flexible Time Off (FTO) rather than traditional PTO. FTO is accrued at a rate of 1.5 days per month, totaling 18 days annually for a full-time employee, and may be used for vacation, personal matters, or short-term illness of less than three consecutive days. FTO does not roll over between calendar years, and unused balances are not paid out upon departure except where required by local law. 3.2 Legacy PTO Plan Employees hired before January 2019 remain on the legacy Paid Time Off (PTO) plan unless they have voluntarily opted into FTO in writing. The legacy plan accrues at 2 days per month, totaling 24 days annually, and does not combine sick leave with vacation time \u2014",
+        "within 12 months of the birth, adoption, or foster placement of a child. 3.6 Jury Duty Employees summoned for jury duty will be paid their regular salary for the duration of their service, with no cap on the number of days, provided proof of summons is submitted to People Operations. 4. Benefits Meridian offers medical, dental, and vision coverage to all full-time employees, effective on the first day of the month following hire. The company covers 80% of the premium for employee-only coverage and 60% of the premium for dependent coverage. Meridian matches 401(k) contributions dollar-for-dollar up to 4% of an employee's base salary. Matching contributions vest immediately and are deposited each pay period alongside the employee's own contribution. All employees and their household members have access to the company's EAP, which provides confidential counseling sessions, financial planning consultations, and legal referrals at no cost. The EAP can be reached"
+      ],
+      "keyword_chunk_ids": [
+        "to leveled pay bands that are reviewed annually against external market data. Employees may request a summary of their pay band placement from their manager or People Operations at any time. All full-time employees in good standing are eligible for the annual performance bonus, paid each March, equal to up to 10% of base salary depending on individual and company performance that year. Bonus percentages are communicated individually and are not guaranteed to be uniform across teams. Part-time and contract employees are not eligible for the annual bonus program under any circumstances. Annual merit increases, where applicable, are effective each July and are communicated alongside the employee's midyear check-in. Merit increases and the annual bonus are evaluated separately and one does not guarantee the other. 3. Time Off Policies 3.1 Flexible Time Off (FTO) Full-time employees hired on or after January 2019 accrue Flexible Time Off (FTO) rather than traditional"
+      ],
+      "fused_chunk_ids": [
+        3,
+        11,
+        2,
+        12,
+        4,
+        7
+      ],
+      "reranked_chunk_ids": [
+        3,
+        11,
+        2
+      ],
+      "first_answer": "The annual performance bonus is up to 10% of base salary, depending on individual and company performance that year, and it is paid each March.",
+      "verification": {
+        "grounded": true,
+        "issue": "none",
+        "reasoning": "The answer accurately restates the context's statement that the annual performance bonus is up to 10% of base salary based on individual and company performance, paid each March."
+      },
+      "retried": false
+    }
+  },
+  {
+    "question": "Are part-time employees eligible for the annual bonus?",
+    "answer": "No, part-time and contract employees are not eligible for the annual bonus program under any circumstances.",
+    "retrieval": {
+      "full_recall": true,
+      "positions": {
+        "3": 1
+      }
+    },
+    "judge": {
+      "verdict": "correct",
+      "reasoning": "System's answer matches reference exactly, stating both part-time and contract employees are excluded from the annual bonus under any circumstances."
+    },
+    "trace": {
+      "vector_chunk_ids": [
+        "to leveled pay bands that are reviewed annually against external market data. Employees may request a summary of their pay band placement from their manager or People Operations at any time. All full-time employees in good standing are eligible for the annual performance bonus, paid each March, equal to up to 10% of base salary depending on individual and company performance that year. Bonus percentages are communicated individually and are not guaranteed to be uniform across teams. Part-time and contract employees are not eligible for the annual bonus program under any circumstances. Annual merit increases, where applicable, are effective each July and are communicated alongside the employee's midyear check-in. Merit increases and the annual bonus are evaluated separately and one does not guarantee the other. 3. Time Off Policies 3.1 Flexible Time Off (FTO) Full-time employees hired on or after January 2019 accrue Flexible Time Off (FTO) rather than traditional",
+        "increases and the annual bonus are evaluated separately and one does not guarantee the other. 3. Time Off Policies 3.1 Flexible Time Off (FTO) Full-time employees hired on or after January 2019 accrue Flexible Time Off (FTO) rather than traditional PTO. FTO is accrued at a rate of 1.5 days per month, totaling 18 days annually for a full-time employee, and may be used for vacation, personal matters, or short-term illness of less than three consecutive days. FTO does not roll over between calendar years, and unused balances are not paid out upon departure except where required by local law. 3.2 Legacy PTO Plan Employees hired before January 2019 remain on the legacy Paid Time Off (PTO) plan unless they have voluntarily opted into FTO in writing. The legacy plan accrues at 2 days per month, totaling 24 days annually, and does not combine sick leave with vacation time \u2014",
+        "on an active PIP are not eligible for the annual performance bonus described in Section 2, nor for consideration in the mid-year promotion cycle, until the PIP has been successfully closed by their manager. 8. New Hire Orientation & Company Resources During their first week, new hires meet with People Operations to review benefits enrollment, complete required compliance training, and are introduced to available support resources, including the Employee Assistance Program (EAP) confidential counseling line and the internal mentorship program, which pairs new hires with a peer outside their immediate team for their first six months. 9. Special Circumstances In the rare event of a workplace-related fatality, all standard bereavement leave allowances outlined in Section 3 are extended to 10 paid days for immediately affected team members, in addition to mandatory access to EAP counseling resources during the affected period. People Operations will coordinate directly with affected employees regarding this",
+        "through the Expense Portal within 30 days of the expense date. Reports submitted after this window will not be reimbursed except in cases of documented travel delays or system outages affecting the Expense Portal itself. 7. Performance Management Formal performance reviews occur annually each October, with informal check-ins recommended on a quarterly basis between employees and their managers. Review outcomes feed into the following July's merit increase cycle described in Section 2. Employees whose performance falls below expectations may be placed on a Performance Improvement Plan (PIP) by their manager, in consultation with People Operations. A PIP typically runs for 60 to 90 days and includes specific, measurable goals. Employees on an active PIP are not eligible for the annual performance bonus described in Section 2, nor for consideration in the mid-year promotion cycle, until the PIP has been successfully closed by their manager. 8. New Hire Orientation & Company",
+        "Meridian employees. It is reviewed annually by People Operations and Legal, and employees are notified by email whenever a material change is made. Meridian's culture is built around three principles: craftsmanship, accountability, and mutual trust. We expect every employee to take ownership of their work, communicate openly about setbacks, and treat colleagues with the same care they would want extended to themselves. These principles inform how we approach everything from performance management to time off, and they are referenced throughout this handbook. 2. Compensation & Pay Structure Meridian pays all employees on a semi-monthly basis, on the 15th and last business day of each month. Base salaries are set according to leveled pay bands that are reviewed annually against external market data. Employees may request a summary of their pay band placement from their manager or People Operations at any time. All full-time employees in good standing are eligible for",
+        "within 12 months of the birth, adoption, or foster placement of a child. 3.6 Jury Duty Employees summoned for jury duty will be paid their regular salary for the duration of their service, with no cap on the number of days, provided proof of summons is submitted to People Operations. 4. Benefits Meridian offers medical, dental, and vision coverage to all full-time employees, effective on the first day of the month following hire. The company covers 80% of the premium for employee-only coverage and 60% of the premium for dependent coverage. Meridian matches 401(k) contributions dollar-for-dollar up to 4% of an employee's base salary. Matching contributions vest immediately and are deposited each pay period alongside the employee's own contribution. All employees and their household members have access to the company's EAP, which provides confidential counseling sessions, financial planning consultations, and legal referrals at no cost. The EAP can be reached"
+      ],
+      "keyword_chunk_ids": [
+        "to leveled pay bands that are reviewed annually against external market data. Employees may request a summary of their pay band placement from their manager or People Operations at any time. All full-time employees in good standing are eligible for the annual performance bonus, paid each March, equal to up to 10% of base salary depending on individual and company performance that year. Bonus percentages are communicated individually and are not guaranteed to be uniform across teams. Part-time and contract employees are not eligible for the annual bonus program under any circumstances. Annual merit increases, where applicable, are effective each July and are communicated alongside the employee's midyear check-in. Merit increases and the annual bonus are evaluated separately and one does not guarantee the other. 3. Time Off Policies 3.1 Flexible Time Off (FTO) Full-time employees hired on or after January 2019 accrue Flexible Time Off (FTO) rather than traditional"
+      ],
+      "fused_chunk_ids": [
+        3,
+        4,
+        12,
+        11,
+        2,
+        7
+      ],
+      "reranked_chunk_ids": [
+        3,
+        12,
+        11
+      ],
+      "first_answer": "No, part-time and contract employees are not eligible for the annual bonus program under any circumstances.",
+      "verification": {
+        "grounded": true,
+        "issue": "none",
+        "reasoning": "The context explicitly states 'Part-time and contract employees are not eligible for the annual bonus program under any circumstances,' matching the answer verbatim."
+      },
+      "retried": false
+    }
+  },
+  {
+    "question": "Can someone on an active Performance Improvement Plan be considered for a mid-year promotion?",
+    "answer": "No \u2014 employees on an active PIP are not eligible for consideration in the mid-year promotion cycle until the PIP has been successfully closed by their manager.",
+    "retrieval": {
+      "full_recall": true,
+      "positions": {
+        "11": 1
+      }
+    },
+    "judge": {
+      "verdict": "correct",
+      "reasoning": "System's answer matches the reference: no promotion consideration while PIP is active, until it is closed."
+    },
+    "trace": {
+      "vector_chunk_ids": [
+        "through the Expense Portal within 30 days of the expense date. Reports submitted after this window will not be reimbursed except in cases of documented travel delays or system outages affecting the Expense Portal itself. 7. Performance Management Formal performance reviews occur annually each October, with informal check-ins recommended on a quarterly basis between employees and their managers. Review outcomes feed into the following July's merit increase cycle described in Section 2. Employees whose performance falls below expectations may be placed on a Performance Improvement Plan (PIP) by their manager, in consultation with People Operations. A PIP typically runs for 60 to 90 days and includes specific, measurable goals. Employees on an active PIP are not eligible for the annual performance bonus described in Section 2, nor for consideration in the mid-year promotion cycle, until the PIP has been successfully closed by their manager. 8. New Hire Orientation & Company",
+        "on an active PIP are not eligible for the annual performance bonus described in Section 2, nor for consideration in the mid-year promotion cycle, until the PIP has been successfully closed by their manager. 8. New Hire Orientation & Company Resources During their first week, new hires meet with People Operations to review benefits enrollment, complete required compliance training, and are introduced to available support resources, including the Employee Assistance Program (EAP) confidential counseling line and the internal mentorship program, which pairs new hires with a peer outside their immediate team for their first six months. 9. Special Circumstances In the rare event of a workplace-related fatality, all standard bereavement leave allowances outlined in Section 3 are extended to 10 paid days for immediately affected team members, in addition to mandatory access to EAP counseling resources during the affected period. People Operations will coordinate directly with affected employees regarding this",
+        "to leveled pay bands that are reviewed annually against external market data. Employees may request a summary of their pay band placement from their manager or People Operations at any time. All full-time employees in good standing are eligible for the annual performance bonus, paid each March, equal to up to 10% of base salary depending on individual and company performance that year. Bonus percentages are communicated individually and are not guaranteed to be uniform across teams. Part-time and contract employees are not eligible for the annual bonus program under any circumstances. Annual merit increases, where applicable, are effective each July and are communicated alongside the employee's midyear check-in. Merit increases and the annual bonus are evaluated separately and one does not guarantee the other. 3. Time Off Policies 3.1 Flexible Time Off (FTO) Full-time employees hired on or after January 2019 accrue Flexible Time Off (FTO) rather than traditional",
+        "Meridian employees. It is reviewed annually by People Operations and Legal, and employees are notified by email whenever a material change is made. Meridian's culture is built around three principles: craftsmanship, accountability, and mutual trust. We expect every employee to take ownership of their work, communicate openly about setbacks, and treat colleagues with the same care they would want extended to themselves. These principles inform how we approach everything from performance management to time off, and they are referenced throughout this handbook. 2. Compensation & Pay Structure Meridian pays all employees on a semi-monthly basis, on the 15th and last business day of each month. Base salaries are set according to leveled pay bands that are reviewed annually against external market data. Employees may request a summary of their pay band placement from their manager or People Operations at any time. All full-time employees in good standing are eligible for",
+        "leave allowances outlined in Section 3 are extended to 10 paid days for immediately affected team members, in addition to mandatory access to EAP counseling resources during the affected period. People Operations will coordinate directly with affected employees regarding this extension; it is not applied automatically through standard leave request systems.",
+        "within 12 months of the birth, adoption, or foster placement of a child. 3.6 Jury Duty Employees summoned for jury duty will be paid their regular salary for the duration of their service, with no cap on the number of days, provided proof of summons is submitted to People Operations. 4. Benefits Meridian offers medical, dental, and vision coverage to all full-time employees, effective on the first day of the month following hire. The company covers 80% of the premium for employee-only coverage and 60% of the premium for dependent coverage. Meridian matches 401(k) contributions dollar-for-dollar up to 4% of an employee's base salary. Matching contributions vest immediately and are deposited each pay period alongside the employee's own contribution. All employees and their household members have access to the company's EAP, which provides confidential counseling sessions, financial planning consultations, and legal referrals at no cost. The EAP can be reached"
+      ],
+      "keyword_chunk_ids": [],
+      "fused_chunk_ids": [
+        11,
+        12,
+        3,
+        2,
+        13,
+        7
+      ],
+      "reranked_chunk_ids": [
+        11,
+        12,
+        3
+      ],
+      "first_answer": "No \u2014 employees on an active PIP are not eligible for consideration in the mid-year promotion cycle until the PIP has been successfully closed by their manager.",
+      "verification": {
+        "grounded": true,
+        "issue": "none",
+        "reasoning": "The context explicitly states that employees on an active PIP are not eligible for consideration in the mid-year promotion cycle until the PIP has been successfully closed by their manager, matching the answer exactly."
+      },
+      "retried": false
+    }
+  },
+  {
+    "question": "If an employee was hired in 2017 and is currently on an active PIP, how many time-off days do they get this year, and can they expect a bonus?",
+    "answer": "Based on the context provided, I can offer partial information, but the answer requires combining general policy rules with specific facts about this employee that aren't stated in the context.\n\n**What the context tells us:**\n\n- Employees hired **before January 2019** remain on the **legacy PTO plan** (24 days annually, accruing at 2 days/month), unless they voluntarily opted into FTO in writing.\n- Employees on an **active PIP are not eligible for the annual performance bonus**, until the PIP has been successfully closed by their manager.\n\n**What's missing:**\n\nThe question states the employee \"was hired in 2017 and is currently on an active PIP\" as given facts \u2014 but the context does not confirm any actual employee with this hire date or PIP status. The context only describes general company policies, not details about a specific individual. Additionally, the context notes that legacy PTO employees could have \"voluntarily opted into FTO in writing,\" so even the assumption that a 2017 hire is definitely on the legacy plan isn't certain without more information about that individual's choices.\n\n**Answer, applying policy to the stated hypothetical facts:**\n\nIf we take the question's premises at face value (2017 hire, active PIP, and no indication they opted into FTO), then per policy:\n- They would be on the **legacy PTO plan**, accruing **24 days annually**.\n- They would **not** be eligible for the annual performance bonus this year, since the PIP is still active and hasn't been closed by their manager.\n\nHowever, I want to flag that this answer relies on treating the question's stated facts as given rather than something verified within the context itself \u2014 the context provides no record confirming this specific employee's hire date, PIP status, or FTO election.",
+    "retrieval": {
+      "full_recall": true,
+      "positions": {
+        "4": 3,
+        "11": 2
+      }
+    },
+    "judge": {
+      "verdict": "correct",
+      "reasoning": "The system ultimately concludes 24 days per year (legacy PTO) and no bonus while the PIP is active, matching the reference answer, despite extra hedging about assumptions."
+    },
+    "trace": {
+      "vector_chunk_ids": [
+        "on an active PIP are not eligible for the annual performance bonus described in Section 2, nor for consideration in the mid-year promotion cycle, until the PIP has been successfully closed by their manager. 8. New Hire Orientation & Company Resources During their first week, new hires meet with People Operations to review benefits enrollment, complete required compliance training, and are introduced to available support resources, including the Employee Assistance Program (EAP) confidential counseling line and the internal mentorship program, which pairs new hires with a peer outside their immediate team for their first six months. 9. Special Circumstances In the rare event of a workplace-related fatality, all standard bereavement leave allowances outlined in Section 3 are extended to 10 paid days for immediately affected team members, in addition to mandatory access to EAP counseling resources during the affected period. People Operations will coordinate directly with affected employees regarding this",
+        "to leveled pay bands that are reviewed annually against external market data. Employees may request a summary of their pay band placement from their manager or People Operations at any time. All full-time employees in good standing are eligible for the annual performance bonus, paid each March, equal to up to 10% of base salary depending on individual and company performance that year. Bonus percentages are communicated individually and are not guaranteed to be uniform across teams. Part-time and contract employees are not eligible for the annual bonus program under any circumstances. Annual merit increases, where applicable, are effective each July and are communicated alongside the employee's midyear check-in. Merit increases and the annual bonus are evaluated separately and one does not guarantee the other. 3. Time Off Policies 3.1 Flexible Time Off (FTO) Full-time employees hired on or after January 2019 accrue Flexible Time Off (FTO) rather than traditional",
+        "through the Expense Portal within 30 days of the expense date. Reports submitted after this window will not be reimbursed except in cases of documented travel delays or system outages affecting the Expense Portal itself. 7. Performance Management Formal performance reviews occur annually each October, with informal check-ins recommended on a quarterly basis between employees and their managers. Review outcomes feed into the following July's merit increase cycle described in Section 2. Employees whose performance falls below expectations may be placed on a Performance Improvement Plan (PIP) by their manager, in consultation with People Operations. A PIP typically runs for 60 to 90 days and includes specific, measurable goals. Employees on an active PIP are not eligible for the annual performance bonus described in Section 2, nor for consideration in the mid-year promotion cycle, until the PIP has been successfully closed by their manager. 8. New Hire Orientation & Company",
+        "increases and the annual bonus are evaluated separately and one does not guarantee the other. 3. Time Off Policies 3.1 Flexible Time Off (FTO) Full-time employees hired on or after January 2019 accrue Flexible Time Off (FTO) rather than traditional PTO. FTO is accrued at a rate of 1.5 days per month, totaling 18 days annually for a full-time employee, and may be used for vacation, personal matters, or short-term illness of less than three consecutive days. FTO does not roll over between calendar years, and unused balances are not paid out upon departure except where required by local law. 3.2 Legacy PTO Plan Employees hired before January 2019 remain on the legacy Paid Time Off (PTO) plan unless they have voluntarily opted into FTO in writing. The legacy plan accrues at 2 days per month, totaling 24 days annually, and does not combine sick leave with vacation time \u2014",
+        "on the legacy Paid Time Off (PTO) plan unless they have voluntarily opted into FTO in writing. The legacy plan accrues at 2 days per month, totaling 24 days annually, and does not combine sick leave with vacation time \u2014 sick leave under the legacy plan is tracked separately, as described in section 3.3. 3.3 Extended Sick Leave Employees who are ill for three or more consecutive days must use Extended Sick Leave rather than FTO or legacy PTO. Extended Sick Leave provides up to 10 paid days per calendar year and may require a physician's note for absences longer than five consecutive days. Extended Sick Leave is available to all full-time employees regardless of which time-off plan they are otherwise enrolled in. 3.4 Bereavement Leave Employees may take up to 5 paid days of bereavement leave following the death of an immediate family member, defined as a spouse, domestic",
+        "leave allowances outlined in Section 3 are extended to 10 paid days for immediately affected team members, in addition to mandatory access to EAP counseling resources during the affected period. People Operations will coordinate directly with affected employees regarding this extension; it is not applied automatically through standard leave request systems."
+      ],
+      "keyword_chunk_ids": [],
+      "fused_chunk_ids": [
+        12,
+        3,
+        11,
+        4,
+        5,
+        13
+      ],
+      "reranked_chunk_ids": [
+        12,
+        11,
+        4
+      ],
+      "first_answer": "Based on the context:\n\n**Time-off days:** Since the employee was hired in 2017 (before January 2019), they remain on the **Legacy PTO Plan** (unless they voluntarily opted into FTO in writing). This plan accrues at 2 days per month, totaling **24 days annually**.\n\n**Bonus eligibility:** No, they cannot expect a bonus. The context states that \"Employees on an active PIP are not eligible for the annual performance bonus described in Section 2... until the PIP has been successfully closed by their manager.\"",
+      "verification": {
+        "grounded": false,
+        "issue": "unsupported_claim",
+        "reasoning": "The context contains no information about a specific employee being hired in 2017 or being on an active PIP. These specific facts about the employee are not present in the provided context, so the answer's conclusions (Legacy PTO eligibility due to 2017 hire date, and bonus ineligibility due to PIP status) are based on assumed facts not grounded in the context."
+      },
+      "retried": true
+    }
+  },
+  {
+    "question": "What does FTO stand for, and how many days does it provide compared to the legacy plan?",
+    "answer": "FTO stands for Flexible Time Off. It is accrued at a rate of 1.5 days per month, totaling 18 days annually for a full-time employee. By comparison, the legacy PTO plan accrues at 2 days per month, totaling 24 days annually \u2014 6 more days per year than FTO.",
+    "retrieval": {
+      "full_recall": true,
+      "positions": {
+        "3": 3,
+        "4": 1
+      }
+    },
+    "judge": {
+      "verdict": "correct",
+      "reasoning": "System correctly states FTO = Flexible Time Off, 18 days/year (1.5/month) vs legacy 24 days/year (2/month), matching the reference exactly with added accurate detail."
+    },
+    "trace": {
+      "vector_chunk_ids": [
+        "increases and the annual bonus are evaluated separately and one does not guarantee the other. 3. Time Off Policies 3.1 Flexible Time Off (FTO) Full-time employees hired on or after January 2019 accrue Flexible Time Off (FTO) rather than traditional PTO. FTO is accrued at a rate of 1.5 days per month, totaling 18 days annually for a full-time employee, and may be used for vacation, personal matters, or short-term illness of less than three consecutive days. FTO does not roll over between calendar years, and unused balances are not paid out upon departure except where required by local law. 3.2 Legacy PTO Plan Employees hired before January 2019 remain on the legacy Paid Time Off (PTO) plan unless they have voluntarily opted into FTO in writing. The legacy plan accrues at 2 days per month, totaling 24 days annually, and does not combine sick leave with vacation time \u2014",
+        "on the legacy Paid Time Off (PTO) plan unless they have voluntarily opted into FTO in writing. The legacy plan accrues at 2 days per month, totaling 24 days annually, and does not combine sick leave with vacation time \u2014 sick leave under the legacy plan is tracked separately, as described in section 3.3. 3.3 Extended Sick Leave Employees who are ill for three or more consecutive days must use Extended Sick Leave rather than FTO or legacy PTO. Extended Sick Leave provides up to 10 paid days per calendar year and may require a physician's note for absences longer than five consecutive days. Extended Sick Leave is available to all full-time employees regardless of which time-off plan they are otherwise enrolled in. 3.4 Bereavement Leave Employees may take up to 5 paid days of bereavement leave following the death of an immediate family member, defined as a spouse, domestic",
+        "to leveled pay bands that are reviewed annually against external market data. Employees may request a summary of their pay band placement from their manager or People Operations at any time. All full-time employees in good standing are eligible for the annual performance bonus, paid each March, equal to up to 10% of base salary depending on individual and company performance that year. Bonus percentages are communicated individually and are not guaranteed to be uniform across teams. Part-time and contract employees are not eligible for the annual bonus program under any circumstances. Annual merit increases, where applicable, are effective each July and are communicated alongside the employee's midyear check-in. Merit increases and the annual bonus are evaluated separately and one does not guarantee the other. 3. Time Off Policies 3.1 Flexible Time Off (FTO) Full-time employees hired on or after January 2019 accrue Flexible Time Off (FTO) rather than traditional",
+        "all full-time employees regardless of which time-off plan they are otherwise enrolled in. 3.4 Bereavement Leave Employees may take up to 5 paid days of bereavement leave following the death of an immediate family member, defined as a spouse, domestic partner, child, parent, or sibling. Bereavement leave for an extended family member (grandparent, aunt, uncle, or in-law) is capped at 2 paid days. Additional circumstances affecting bereavement leave duration are described in Section 9 of this handbook. 3.5 Parental Leave Meridian provides 12 weeks of paid parental leave for the primary caregiver and 4 weeks for the secondary caregiver, regardless of the employee's time-off plan. Parental leave must be taken within 12 months of the birth, adoption, or foster placement of a child. 3.6 Jury Duty Employees summoned for jury duty will be paid their regular salary for the duration of their service, with no cap on the number of",
+        "leave allowances outlined in Section 3 are extended to 10 paid days for immediately affected team members, in addition to mandatory access to EAP counseling resources during the affected period. People Operations will coordinate directly with affected employees regarding this extension; it is not applied automatically through standard leave request systems.",
+        "within 12 months of the birth, adoption, or foster placement of a child. 3.6 Jury Duty Employees summoned for jury duty will be paid their regular salary for the duration of their service, with no cap on the number of days, provided proof of summons is submitted to People Operations. 4. Benefits Meridian offers medical, dental, and vision coverage to all full-time employees, effective on the first day of the month following hire. The company covers 80% of the premium for employee-only coverage and 60% of the premium for dependent coverage. Meridian matches 401(k) contributions dollar-for-dollar up to 4% of an employee's base salary. Matching contributions vest immediately and are deposited each pay period alongside the employee's own contribution. All employees and their household members have access to the company's EAP, which provides confidential counseling sessions, financial planning consultations, and legal referrals at no cost. The EAP can be reached"
+      ],
+      "keyword_chunk_ids": [],
+      "fused_chunk_ids": [
+        4,
+        5,
+        3,
+        6,
+        13,
+        7
+      ],
+      "reranked_chunk_ids": [
+        4,
+        5,
+        3
+      ],
+      "first_answer": "FTO stands for Flexible Time Off. It is accrued at a rate of 1.5 days per month, totaling 18 days annually for a full-time employee. By comparison, the legacy PTO plan accrues at 2 days per month, totaling 24 days annually \u2014 6 more days per year than FTO.",
+      "verification": {
+        "grounded": true,
+        "issue": "none",
+        "reasoning": "All claims (FTO definition, accrual rate, annual total, legacy PTO accrual rate and total, and the 6-day difference calculation) are directly supported by the context."
+      },
+      "retried": false
+    }
+  },
+  {
+    "question": "What percentage does Meridian match for 401(k) contributions?",
+    "answer": "Meridian matches 401(k) contributions dollar-for-dollar up to 4% of an employee's base salary.",
+    "retrieval": {
+      "full_recall": true,
+      "positions": {
+        "7": 1
+      }
+    },
+    "judge": {
+      "verdict": "correct",
+      "reasoning": "The system's answer matches the reference, stating a 4% dollar-for-dollar match up to base salary, just phrased slightly differently."
+    },
+    "trace": {
+      "vector_chunk_ids": [
+        "within 12 months of the birth, adoption, or foster placement of a child. 3.6 Jury Duty Employees summoned for jury duty will be paid their regular salary for the duration of their service, with no cap on the number of days, provided proof of summons is submitted to People Operations. 4. Benefits Meridian offers medical, dental, and vision coverage to all full-time employees, effective on the first day of the month following hire. The company covers 80% of the premium for employee-only coverage and 60% of the premium for dependent coverage. Meridian matches 401(k) contributions dollar-for-dollar up to 4% of an employee's base salary. Matching contributions vest immediately and are deposited each pay period alongside the employee's own contribution. All employees and their household members have access to the company's EAP, which provides confidential counseling sessions, financial planning consultations, and legal referrals at no cost. The EAP can be reached",
+        "Meridian employees. It is reviewed annually by People Operations and Legal, and employees are notified by email whenever a material change is made. Meridian's culture is built around three principles: craftsmanship, accountability, and mutual trust. We expect every employee to take ownership of their work, communicate openly about setbacks, and treat colleagues with the same care they would want extended to themselves. These principles inform how we approach everything from performance management to time off, and they are referenced throughout this handbook. 2. Compensation & Pay Structure Meridian pays all employees on a semi-monthly basis, on the 15th and last business day of each month. Base salaries are set according to leveled pay bands that are reviewed annually against external market data. Employees may request a summary of their pay band placement from their manager or People Operations at any time. All full-time employees in good standing are eligible for",
+        "Meridian Fabrication Co. Employee Handbook \u2014 Internal Use Only 1. Company Overview Meridian Fabrication Co. was founded in 2011 by a small group of mechanical and software engineers with a shared interest in building precision manufacturing equipment for the renewable energy sector. What began as a ten-person workshop in a converted warehouse has since grown into a company of over four hundred employees across three sites, with headquarters remaining at our original location. Our mission is to design and build fabrication systems that make sustainable manufacturing accessible to smaller producers who would otherwise be priced out of automation. This handbook describes the policies, benefits, and expectations that apply to all Meridian employees. It is reviewed annually by People Operations and Legal, and employees are notified by email whenever a material change is made. Meridian's culture is built around three principles: craftsmanship, accountability, and mutual trust. We expect every employee to",
+        "deposited each pay period alongside the employee's own contribution. All employees and their household members have access to the company's EAP, which provides confidential counseling sessions, financial planning consultations, and legal referrals at no cost. The EAP can be reached 24 hours a day through the number listed on the internal benefits portal, and usage is never reported to managers or People Operations in identifiable form. 5. Remote Work Policy Meridian supports a flexible approach to remote work, recognizing that a distributed, trust-based culture improves both morale and output while maintaining the collaborative spirit that has defined our engineering teams since the company's founding. Remote and hybrid employees are expected to maintain core collaboration hours between 10am and 3pm in their assigned time zone, and to remain reachable via company messaging tools during standard business hours. Managers are encouraged to set team-level norms that go beyond this minimum where collaboration",
+        "to leveled pay bands that are reviewed annually against external market data. Employees may request a summary of their pay band placement from their manager or People Operations at any time. All full-time employees in good standing are eligible for the annual performance bonus, paid each March, equal to up to 10% of base salary depending on individual and company performance that year. Bonus percentages are communicated individually and are not guaranteed to be uniform across teams. Part-time and contract employees are not eligible for the annual bonus program under any circumstances. Annual merit increases, where applicable, are effective each July and are communicated alongside the employee's midyear check-in. Merit increases and the annual bonus are evaluated separately and one does not guarantee the other. 3. Time Off Policies 3.1 Flexible Time Off (FTO) Full-time employees hired on or after January 2019 accrue Flexible Time Off (FTO) rather than traditional",
+        "all full-time employees regardless of which time-off plan they are otherwise enrolled in. 3.4 Bereavement Leave Employees may take up to 5 paid days of bereavement leave following the death of an immediate family member, defined as a spouse, domestic partner, child, parent, or sibling. Bereavement leave for an extended family member (grandparent, aunt, uncle, or in-law) is capped at 2 paid days. Additional circumstances affecting bereavement leave duration are described in Section 9 of this handbook. 3.5 Parental Leave Meridian provides 12 weeks of paid parental leave for the primary caregiver and 4 weeks for the secondary caregiver, regardless of the employee's time-off plan. Parental leave must be taken within 12 months of the birth, adoption, or foster placement of a child. 3.6 Jury Duty Employees summoned for jury duty will be paid their regular salary for the duration of their service, with no cap on the number of"
+      ],
+      "keyword_chunk_ids": [],
+      "fused_chunk_ids": [
+        7,
+        2,
+        1,
+        8,
+        3,
+        6
+      ],
+      "reranked_chunk_ids": [
+        7,
+        8,
+        2
+      ],
+      "first_answer": "Meridian matches 401(k) contributions dollar-for-dollar up to 4% of an employee's base salary.",
+      "verification": {
+        "grounded": true,
+        "issue": "none",
+        "reasoning": "The context explicitly states Meridian matches 401(k) contributions dollar-for-dollar up to 4% of an employee's base salary, matching the generated answer exactly."
+      },
+      "retried": false
+    }
+  },
+  {
+    "question": "What does EAP actually stand for?",
+    "answer": "EAP stands for Employee Assistance Program.",
+    "retrieval": {
+      "full_recall": true,
+      "positions": {
+        "12": 1
+      }
+    },
+    "judge": {
+      "verdict": "correct",
+      "reasoning": "System's answer matches the reference answer exactly."
+    },
+    "trace": {
+      "vector_chunk_ids": [
+        "deposited each pay period alongside the employee's own contribution. All employees and their household members have access to the company's EAP, which provides confidential counseling sessions, financial planning consultations, and legal referrals at no cost. The EAP can be reached 24 hours a day through the number listed on the internal benefits portal, and usage is never reported to managers or People Operations in identifiable form. 5. Remote Work Policy Meridian supports a flexible approach to remote work, recognizing that a distributed, trust-based culture improves both morale and output while maintaining the collaborative spirit that has defined our engineering teams since the company's founding. Remote and hybrid employees are expected to maintain core collaboration hours between 10am and 3pm in their assigned time zone, and to remain reachable via company messaging tools during standard business hours. Managers are encouraged to set team-level norms that go beyond this minimum where collaboration",
+        "leave allowances outlined in Section 3 are extended to 10 paid days for immediately affected team members, in addition to mandatory access to EAP counseling resources during the affected period. People Operations will coordinate directly with affected employees regarding this extension; it is not applied automatically through standard leave request systems.",
+        "within 12 months of the birth, adoption, or foster placement of a child. 3.6 Jury Duty Employees summoned for jury duty will be paid their regular salary for the duration of their service, with no cap on the number of days, provided proof of summons is submitted to People Operations. 4. Benefits Meridian offers medical, dental, and vision coverage to all full-time employees, effective on the first day of the month following hire. The company covers 80% of the premium for employee-only coverage and 60% of the premium for dependent coverage. Meridian matches 401(k) contributions dollar-for-dollar up to 4% of an employee's base salary. Matching contributions vest immediately and are deposited each pay period alongside the employee's own contribution. All employees and their household members have access to the company's EAP, which provides confidential counseling sessions, financial planning consultations, and legal referrals at no cost. The EAP can be reached",
+        "on an active PIP are not eligible for the annual performance bonus described in Section 2, nor for consideration in the mid-year promotion cycle, until the PIP has been successfully closed by their manager. 8. New Hire Orientation & Company Resources During their first week, new hires meet with People Operations to review benefits enrollment, complete required compliance training, and are introduced to available support resources, including the Employee Assistance Program (EAP) confidential counseling line and the internal mentorship program, which pairs new hires with a peer outside their immediate team for their first six months. 9. Special Circumstances In the rare event of a workplace-related fatality, all standard bereavement leave allowances outlined in Section 3 are extended to 10 paid days for immediately affected team members, in addition to mandatory access to EAP counseling resources during the affected period. People Operations will coordinate directly with affected employees regarding this",
+        "through the Expense Portal within 30 days of the expense date. Reports submitted after this window will not be reimbursed except in cases of documented travel delays or system outages affecting the Expense Portal itself. 7. Performance Management Formal performance reviews occur annually each October, with informal check-ins recommended on a quarterly basis between employees and their managers. Review outcomes feed into the following July's merit increase cycle described in Section 2. Employees whose performance falls below expectations may be placed on a Performance Improvement Plan (PIP) by their manager, in consultation with People Operations. A PIP typically runs for 60 to 90 days and includes specific, measurable goals. Employees on an active PIP are not eligible for the annual performance bonus described in Section 2, nor for consideration in the mid-year promotion cycle, until the PIP has been successfully closed by their manager. 8. New Hire Orientation & Company",
+        "Meridian Fabrication Co. Employee Handbook \u2014 Internal Use Only 1. Company Overview Meridian Fabrication Co. was founded in 2011 by a small group of mechanical and software engineers with a shared interest in building precision manufacturing equipment for the renewable energy sector. What began as a ten-person workshop in a converted warehouse has since grown into a company of over four hundred employees across three sites, with headquarters remaining at our original location. Our mission is to design and build fabrication systems that make sustainable manufacturing accessible to smaller producers who would otherwise be priced out of automation. This handbook describes the policies, benefits, and expectations that apply to all Meridian employees. It is reviewed annually by People Operations and Legal, and employees are notified by email whenever a material change is made. Meridian's culture is built around three principles: craftsmanship, accountability, and mutual trust. We expect every employee to"
+      ],
+      "keyword_chunk_ids": [],
+      "fused_chunk_ids": [
+        8,
+        13,
+        7,
+        12,
+        11,
+        1
+      ],
+      "reranked_chunk_ids": [
+        12,
+        8,
+        7
+      ],
+      "first_answer": "The context does not explicitly state what \"EAP\" stands for.",
+      "verification": {
+        "grounded": false,
+        "issue": "missed_information",
+        "reasoning": "The context explicitly refers to 'Employee Assistance Program (EAP)' in Section 8, which spells out what EAP stands for. The generated answer incorrectly claims this information is not present."
+      },
+      "retried": true
+    }
+  },
+  {
+    "question": "When are performance reviews held, and how often should informal check-ins happen?",
+    "answer": "Formal performance reviews are held annually each October, and informal check-ins are recommended on a quarterly basis between employees and their managers.",
+    "retrieval": {
+      "full_recall": true,
+      "positions": {
+        "11": 1
+      }
+    },
+    "judge": {
+      "verdict": "correct",
+      "reasoning": "System's answer matches the reference: annual formal reviews in October and quarterly informal check-ins."
+    },
+    "trace": {
+      "vector_chunk_ids": [
+        "through the Expense Portal within 30 days of the expense date. Reports submitted after this window will not be reimbursed except in cases of documented travel delays or system outages affecting the Expense Portal itself. 7. Performance Management Formal performance reviews occur annually each October, with informal check-ins recommended on a quarterly basis between employees and their managers. Review outcomes feed into the following July's merit increase cycle described in Section 2. Employees whose performance falls below expectations may be placed on a Performance Improvement Plan (PIP) by their manager, in consultation with People Operations. A PIP typically runs for 60 to 90 days and includes specific, measurable goals. Employees on an active PIP are not eligible for the annual performance bonus described in Section 2, nor for consideration in the mid-year promotion cycle, until the PIP has been successfully closed by their manager. 8. New Hire Orientation & Company",
+        "Meridian employees. It is reviewed annually by People Operations and Legal, and employees are notified by email whenever a material change is made. Meridian's culture is built around three principles: craftsmanship, accountability, and mutual trust. We expect every employee to take ownership of their work, communicate openly about setbacks, and treat colleagues with the same care they would want extended to themselves. These principles inform how we approach everything from performance management to time off, and they are referenced throughout this handbook. 2. Compensation & Pay Structure Meridian pays all employees on a semi-monthly basis, on the 15th and last business day of each month. Base salaries are set according to leveled pay bands that are reviewed annually against external market data. Employees may request a summary of their pay band placement from their manager or People Operations at any time. All full-time employees in good standing are eligible for",
+        "to leveled pay bands that are reviewed annually against external market data. Employees may request a summary of their pay band placement from their manager or People Operations at any time. All full-time employees in good standing are eligible for the annual performance bonus, paid each March, equal to up to 10% of base salary depending on individual and company performance that year. Bonus percentages are communicated individually and are not guaranteed to be uniform across teams. Part-time and contract employees are not eligible for the annual bonus program under any circumstances. Annual merit increases, where applicable, are effective each July and are communicated alongside the employee's midyear check-in. Merit increases and the annual bonus are evaluated separately and one does not guarantee the other. 3. Time Off Policies 3.1 Flexible Time Off (FTO) Full-time employees hired on or after January 2019 accrue Flexible Time Off (FTO) rather than traditional",
+        "on an active PIP are not eligible for the annual performance bonus described in Section 2, nor for consideration in the mid-year promotion cycle, until the PIP has been successfully closed by their manager. 8. New Hire Orientation & Company Resources During their first week, new hires meet with People Operations to review benefits enrollment, complete required compliance training, and are introduced to available support resources, including the Employee Assistance Program (EAP) confidential counseling line and the internal mentorship program, which pairs new hires with a peer outside their immediate team for their first six months. 9. Special Circumstances In the rare event of a workplace-related fatality, all standard bereavement leave allowances outlined in Section 3 are extended to 10 paid days for immediately affected team members, in addition to mandatory access to EAP counseling resources during the affected period. People Operations will coordinate directly with affected employees regarding this",
+        "and Legal before travel begins, and failure to obtain approval may result in the employee bearing personal responsibility for any resulting tax liability. 6. Expense Reimbursement 6.1 General Limits Employees may claim reimbursement for reasonable business expenses, including client meals, local transportation, and approved software subscriptions. Client meal expenses up to $150 per event do not require pre-approval; amounts exceeding $150 require written approval from a manager prior to the expense being incurred. Expenses exceeding $2,000 in total are escalated to the Expense Review Committee, which meets on the first Monday of each month to evaluate larger requests. 6.2 Submission Deadlines All expense reports, regardless of category, must be submitted through the Expense Portal within 30 days of the expense date. Reports submitted after this window will not be reimbursed except in cases of documented travel delays or system outages affecting the Expense Portal itself. 7. Performance Management Formal performance",
+        "Meridian Fabrication Co. Employee Handbook \u2014 Internal Use Only 1. Company Overview Meridian Fabrication Co. was founded in 2011 by a small group of mechanical and software engineers with a shared interest in building precision manufacturing equipment for the renewable energy sector. What began as a ten-person workshop in a converted warehouse has since grown into a company of over four hundred employees across three sites, with headquarters remaining at our original location. Our mission is to design and build fabrication systems that make sustainable manufacturing accessible to smaller producers who would otherwise be priced out of automation. This handbook describes the policies, benefits, and expectations that apply to all Meridian employees. It is reviewed annually by People Operations and Legal, and employees are notified by email whenever a material change is made. Meridian's culture is built around three principles: craftsmanship, accountability, and mutual trust. We expect every employee to"
+      ],
+      "keyword_chunk_ids": [],
+      "fused_chunk_ids": [
+        11,
+        2,
+        3,
+        12,
+        10,
+        1
+      ],
+      "reranked_chunk_ids": [
+        11,
+        3,
+        2
+      ],
+      "first_answer": "Formal performance reviews are held annually each October, and informal check-ins are recommended on a quarterly basis between employees and their managers.",
+      "verification": {
+        "grounded": true,
+        "issue": "none",
+        "reasoning": "The answer directly matches the context statement about annual October performance reviews and quarterly informal check-ins."
+      },
+      "retried": false
+    }
+  },
+  {
+    "question": "Is the Expense Review Committee involved in performance reviews?",
+    "answer": "No, the context does not indicate that the Expense Review Committee is involved in performance reviews. The Expense Review Committee's role is limited to evaluating larger expense requests exceeding $2,000, meeting on the first Monday of each month for that purpose. Performance reviews and Performance Improvement Plans (PIPs) are instead handled by managers, in consultation with People Operations \u2014 the Expense Review Committee is not mentioned in connection with Section 7 (Performance Management) at all.",
+    "retrieval": {
+      "full_recall": true,
+      "positions": {
+        "10": 1,
+        "11": 2
+      }
+    },
+    "judge": {
+      "verdict": "correct",
+      "reasoning": "System correctly states no involvement, matches reference's key facts: expense threshold over $2,000 and separate performance review process."
+    },
+    "trace": {
+      "vector_chunk_ids": [
+        "through the Expense Portal within 30 days of the expense date. Reports submitted after this window will not be reimbursed except in cases of documented travel delays or system outages affecting the Expense Portal itself. 7. Performance Management Formal performance reviews occur annually each October, with informal check-ins recommended on a quarterly basis between employees and their managers. Review outcomes feed into the following July's merit increase cycle described in Section 2. Employees whose performance falls below expectations may be placed on a Performance Improvement Plan (PIP) by their manager, in consultation with People Operations. A PIP typically runs for 60 to 90 days and includes specific, measurable goals. Employees on an active PIP are not eligible for the annual performance bonus described in Section 2, nor for consideration in the mid-year promotion cycle, until the PIP has been successfully closed by their manager. 8. New Hire Orientation & Company",
+        "and Legal before travel begins, and failure to obtain approval may result in the employee bearing personal responsibility for any resulting tax liability. 6. Expense Reimbursement 6.1 General Limits Employees may claim reimbursement for reasonable business expenses, including client meals, local transportation, and approved software subscriptions. Client meal expenses up to $150 per event do not require pre-approval; amounts exceeding $150 require written approval from a manager prior to the expense being incurred. Expenses exceeding $2,000 in total are escalated to the Expense Review Committee, which meets on the first Monday of each month to evaluate larger requests. 6.2 Submission Deadlines All expense reports, regardless of category, must be submitted through the Expense Portal within 30 days of the expense date. Reports submitted after this window will not be reimbursed except in cases of documented travel delays or system outages affecting the Expense Portal itself. 7. Performance Management Formal performance",
+        "to leveled pay bands that are reviewed annually against external market data. Employees may request a summary of their pay band placement from their manager or People Operations at any time. All full-time employees in good standing are eligible for the annual performance bonus, paid each March, equal to up to 10% of base salary depending on individual and company performance that year. Bonus percentages are communicated individually and are not guaranteed to be uniform across teams. Part-time and contract employees are not eligible for the annual bonus program under any circumstances. Annual merit increases, where applicable, are effective each July and are communicated alongside the employee's midyear check-in. Merit increases and the annual bonus are evaluated separately and one does not guarantee the other. 3. Time Off Policies 3.1 Flexible Time Off (FTO) Full-time employees hired on or after January 2019 accrue Flexible Time Off (FTO) rather than traditional",
+        "Meridian employees. It is reviewed annually by People Operations and Legal, and employees are notified by email whenever a material change is made. Meridian's culture is built around three principles: craftsmanship, accountability, and mutual trust. We expect every employee to take ownership of their work, communicate openly about setbacks, and treat colleagues with the same care they would want extended to themselves. These principles inform how we approach everything from performance management to time off, and they are referenced throughout this handbook. 2. Compensation & Pay Structure Meridian pays all employees on a semi-monthly basis, on the 15th and last business day of each month. Base salaries are set according to leveled pay bands that are reviewed annually against external market data. Employees may request a summary of their pay band placement from their manager or People Operations at any time. All full-time employees in good standing are eligible for",
+        "on an active PIP are not eligible for the annual performance bonus described in Section 2, nor for consideration in the mid-year promotion cycle, until the PIP has been successfully closed by their manager. 8. New Hire Orientation & Company Resources During their first week, new hires meet with People Operations to review benefits enrollment, complete required compliance training, and are introduced to available support resources, including the Employee Assistance Program (EAP) confidential counseling line and the internal mentorship program, which pairs new hires with a peer outside their immediate team for their first six months. 9. Special Circumstances In the rare event of a workplace-related fatality, all standard bereavement leave allowances outlined in Section 3 are extended to 10 paid days for immediately affected team members, in addition to mandatory access to EAP counseling resources during the affected period. People Operations will coordinate directly with affected employees regarding this",
+        "to maintain core collaboration hours between 10am and 3pm in their assigned time zone, and to remain reachable via company messaging tools during standard business hours. Managers are encouraged to set team-level norms that go beyond this minimum where collaboration needs require it, and teams that work across more than two time zones are encouraged to document their agreed-upon overlap hours in their team charter. Employees who wish to work temporarily from outside their home country for personal travel may do so for up to 20 consecutive days per calendar year without triggering additional tax residency documentation; extended stays beyond this threshold require prior written approval from both People Operations and Legal before travel begins, and failure to obtain approval may result in the employee bearing personal responsibility for any resulting tax liability. 6. Expense Reimbursement 6.1 General Limits Employees may claim reimbursement for reasonable business expenses, including client meals,"
+      ],
+      "keyword_chunk_ids": [],
+      "fused_chunk_ids": [
+        11,
+        10,
+        3,
+        2,
+        12,
+        9
+      ],
+      "reranked_chunk_ids": [
+        10,
+        11,
+        2
+      ],
+      "first_answer": "No. According to the context, the Expense Review Committee's role is limited to meeting on the first Monday of each month to evaluate expense requests exceeding $2,000. It is not mentioned as having any involvement in performance reviews, which are instead managed by employees' managers in consultation with People Operations.",
+      "verification": {
+        "grounded": false,
+        "issue": "unsupported_claim",
+        "reasoning": "The context specifies that managers, in consultation with People Operations, handle Performance Improvement Plans (PIPs) specifically, not general performance reviews. The answer incorrectly generalizes this PIP-specific process to all 'performance reviews,' which is not directly supported by the context."
+      },
+      "retried": true
+    }
+  },
+  {
+    "question": "How many consecutive days can an employee work abroad before needing approval, and who approves longer stays?",
+    "answer": "Employees may work temporarily from outside their home country for up to **20 consecutive days per calendar year** without triggering additional tax residency documentation. Extended stays beyond this threshold require **prior written approval from both People Operations and Legal** before travel begins.",
+    "retrieval": {
+      "full_recall": true,
+      "positions": {
+        "9": 1
+      }
+    },
+    "judge": {
+      "verdict": "correct",
+      "reasoning": "The system's answer matches the reference: 20 consecutive days threshold without extra tax documentation, and longer stays require prior written approval from both People Operations and Legal. The added detail 'per calendar year' and 'before travel begins' does not contradict the reference and is consistent additional context."
+    },
+    "trace": {
+      "vector_chunk_ids": [
+        "to maintain core collaboration hours between 10am and 3pm in their assigned time zone, and to remain reachable via company messaging tools during standard business hours. Managers are encouraged to set team-level norms that go beyond this minimum where collaboration needs require it, and teams that work across more than two time zones are encouraged to document their agreed-upon overlap hours in their team charter. Employees who wish to work temporarily from outside their home country for personal travel may do so for up to 20 consecutive days per calendar year without triggering additional tax residency documentation; extended stays beyond this threshold require prior written approval from both People Operations and Legal before travel begins, and failure to obtain approval may result in the employee bearing personal responsibility for any resulting tax liability. 6. Expense Reimbursement 6.1 General Limits Employees may claim reimbursement for reasonable business expenses, including client meals,",
+        "and Legal before travel begins, and failure to obtain approval may result in the employee bearing personal responsibility for any resulting tax liability. 6. Expense Reimbursement 6.1 General Limits Employees may claim reimbursement for reasonable business expenses, including client meals, local transportation, and approved software subscriptions. Client meal expenses up to $150 per event do not require pre-approval; amounts exceeding $150 require written approval from a manager prior to the expense being incurred. Expenses exceeding $2,000 in total are escalated to the Expense Review Committee, which meets on the first Monday of each month to evaluate larger requests. 6.2 Submission Deadlines All expense reports, regardless of category, must be submitted through the Expense Portal within 30 days of the expense date. Reports submitted after this window will not be reimbursed except in cases of documented travel delays or system outages affecting the Expense Portal itself. 7. Performance Management Formal performance",
+        "leave allowances outlined in Section 3 are extended to 10 paid days for immediately affected team members, in addition to mandatory access to EAP counseling resources during the affected period. People Operations will coordinate directly with affected employees regarding this extension; it is not applied automatically through standard leave request systems.",
+        "on the legacy Paid Time Off (PTO) plan unless they have voluntarily opted into FTO in writing. The legacy plan accrues at 2 days per month, totaling 24 days annually, and does not combine sick leave with vacation time \u2014 sick leave under the legacy plan is tracked separately, as described in section 3.3. 3.3 Extended Sick Leave Employees who are ill for three or more consecutive days must use Extended Sick Leave rather than FTO or legacy PTO. Extended Sick Leave provides up to 10 paid days per calendar year and may require a physician's note for absences longer than five consecutive days. Extended Sick Leave is available to all full-time employees regardless of which time-off plan they are otherwise enrolled in. 3.4 Bereavement Leave Employees may take up to 5 paid days of bereavement leave following the death of an immediate family member, defined as a spouse, domestic",
+        "increases and the annual bonus are evaluated separately and one does not guarantee the other. 3. Time Off Policies 3.1 Flexible Time Off (FTO) Full-time employees hired on or after January 2019 accrue Flexible Time Off (FTO) rather than traditional PTO. FTO is accrued at a rate of 1.5 days per month, totaling 18 days annually for a full-time employee, and may be used for vacation, personal matters, or short-term illness of less than three consecutive days. FTO does not roll over between calendar years, and unused balances are not paid out upon departure except where required by local law. 3.2 Legacy PTO Plan Employees hired before January 2019 remain on the legacy Paid Time Off (PTO) plan unless they have voluntarily opted into FTO in writing. The legacy plan accrues at 2 days per month, totaling 24 days annually, and does not combine sick leave with vacation time \u2014",
+        "through the Expense Portal within 30 days of the expense date. Reports submitted after this window will not be reimbursed except in cases of documented travel delays or system outages affecting the Expense Portal itself. 7. Performance Management Formal performance reviews occur annually each October, with informal check-ins recommended on a quarterly basis between employees and their managers. Review outcomes feed into the following July's merit increase cycle described in Section 2. Employees whose performance falls below expectations may be placed on a Performance Improvement Plan (PIP) by their manager, in consultation with People Operations. A PIP typically runs for 60 to 90 days and includes specific, measurable goals. Employees on an active PIP are not eligible for the annual performance bonus described in Section 2, nor for consideration in the mid-year promotion cycle, until the PIP has been successfully closed by their manager. 8. New Hire Orientation & Company"
+      ],
+      "keyword_chunk_ids": [],
+      "fused_chunk_ids": [
+        9,
+        10,
+        13,
+        5,
+        4,
+        11
+      ],
+      "reranked_chunk_ids": [
+        9,
+        10,
+        5
+      ],
+      "first_answer": "Employees may work temporarily from outside their home country for up to **20 consecutive days per calendar year** without triggering additional tax residency documentation. Extended stays beyond this threshold require **prior written approval from both People Operations and Legal** before travel begins.",
+      "verification": {
+        "grounded": true,
+        "issue": "none",
+        "reasoning": "Both claims about the 20-day threshold and the requirement for prior written approval from People Operations and Legal are directly supported by the context."
+      },
+      "retried": false
+    }
+  },
+  {
+    "question": "In the event of a workplace death, how many bereavement days are affected employees entitled to, and is this automatic?",
+    "answer": "In the event of a workplace-related fatality, affected employees are entitled to **10 paid days** of bereavement leave (extended from the standard 5 days outlined in Section 3.4).\n\nThis extension is **not automatic** \u2014 it is not applied through standard leave request systems. Instead, People Operations coordinates directly with affected employees regarding this extension.",
+    "retrieval": {
+      "full_recall": true,
+      "positions": {
+        "12": 1,
+        "13": 2
+      }
+    },
+    "judge": {
+      "verdict": "correct",
+      "reasoning": "The system's answer matches the reference: 10 paid days extended from standard 5, and explicitly states it's not automatic, with People Operations coordinating directly."
+    },
+    "trace": {
+      "vector_chunk_ids": [
+        "on the legacy Paid Time Off (PTO) plan unless they have voluntarily opted into FTO in writing. The legacy plan accrues at 2 days per month, totaling 24 days annually, and does not combine sick leave with vacation time \u2014 sick leave under the legacy plan is tracked separately, as described in section 3.3. 3.3 Extended Sick Leave Employees who are ill for three or more consecutive days must use Extended Sick Leave rather than FTO or legacy PTO. Extended Sick Leave provides up to 10 paid days per calendar year and may require a physician's note for absences longer than five consecutive days. Extended Sick Leave is available to all full-time employees regardless of which time-off plan they are otherwise enrolled in. 3.4 Bereavement Leave Employees may take up to 5 paid days of bereavement leave following the death of an immediate family member, defined as a spouse, domestic",
+        "all full-time employees regardless of which time-off plan they are otherwise enrolled in. 3.4 Bereavement Leave Employees may take up to 5 paid days of bereavement leave following the death of an immediate family member, defined as a spouse, domestic partner, child, parent, or sibling. Bereavement leave for an extended family member (grandparent, aunt, uncle, or in-law) is capped at 2 paid days. Additional circumstances affecting bereavement leave duration are described in Section 9 of this handbook. 3.5 Parental Leave Meridian provides 12 weeks of paid parental leave for the primary caregiver and 4 weeks for the secondary caregiver, regardless of the employee's time-off plan. Parental leave must be taken within 12 months of the birth, adoption, or foster placement of a child. 3.6 Jury Duty Employees summoned for jury duty will be paid their regular salary for the duration of their service, with no cap on the number of",
+        "leave allowances outlined in Section 3 are extended to 10 paid days for immediately affected team members, in addition to mandatory access to EAP counseling resources during the affected period. People Operations will coordinate directly with affected employees regarding this extension; it is not applied automatically through standard leave request systems.",
+        "on an active PIP are not eligible for the annual performance bonus described in Section 2, nor for consideration in the mid-year promotion cycle, until the PIP has been successfully closed by their manager. 8. New Hire Orientation & Company Resources During their first week, new hires meet with People Operations to review benefits enrollment, complete required compliance training, and are introduced to available support resources, including the Employee Assistance Program (EAP) confidential counseling line and the internal mentorship program, which pairs new hires with a peer outside their immediate team for their first six months. 9. Special Circumstances In the rare event of a workplace-related fatality, all standard bereavement leave allowances outlined in Section 3 are extended to 10 paid days for immediately affected team members, in addition to mandatory access to EAP counseling resources during the affected period. People Operations will coordinate directly with affected employees regarding this",
+        "increases and the annual bonus are evaluated separately and one does not guarantee the other. 3. Time Off Policies 3.1 Flexible Time Off (FTO) Full-time employees hired on or after January 2019 accrue Flexible Time Off (FTO) rather than traditional PTO. FTO is accrued at a rate of 1.5 days per month, totaling 18 days annually for a full-time employee, and may be used for vacation, personal matters, or short-term illness of less than three consecutive days. FTO does not roll over between calendar years, and unused balances are not paid out upon departure except where required by local law. 3.2 Legacy PTO Plan Employees hired before January 2019 remain on the legacy Paid Time Off (PTO) plan unless they have voluntarily opted into FTO in writing. The legacy plan accrues at 2 days per month, totaling 24 days annually, and does not combine sick leave with vacation time \u2014",
+        "within 12 months of the birth, adoption, or foster placement of a child. 3.6 Jury Duty Employees summoned for jury duty will be paid their regular salary for the duration of their service, with no cap on the number of days, provided proof of summons is submitted to People Operations. 4. Benefits Meridian offers medical, dental, and vision coverage to all full-time employees, effective on the first day of the month following hire. The company covers 80% of the premium for employee-only coverage and 60% of the premium for dependent coverage. Meridian matches 401(k) contributions dollar-for-dollar up to 4% of an employee's base salary. Matching contributions vest immediately and are deposited each pay period alongside the employee's own contribution. All employees and their household members have access to the company's EAP, which provides confidential counseling sessions, financial planning consultations, and legal referrals at no cost. The EAP can be reached"
+      ],
+      "keyword_chunk_ids": [],
+      "fused_chunk_ids": [
+        5,
+        6,
+        13,
+        12,
+        4,
+        7
+      ],
+      "reranked_chunk_ids": [
+        12,
+        13,
+        5
+      ],
+      "first_answer": "In the event of a workplace-related fatality, affected employees are entitled to **10 paid days** of bereavement leave (extended from the standard 5 days outlined in Section 3.4).\n\nThis extension is **not automatic** \u2014 it is not applied through standard leave request systems. Instead, People Operations coordinates directly with affected employees regarding this extension.",
+      "verification": {
+        "grounded": true,
+        "issue": "none",
+        "reasoning": "The answer's claims about 10 paid days extension, standard 5 days bereavement leave, and non-automatic coordination by People Operations are all directly supported by the context."
+      },
+      "retried": false
+    }
+  },
+  {
+    "question": "When does the Expense Review Committee meet?",
+    "answer": "The Expense Review Committee meets on the first Monday of each month to evaluate larger requests (expenses exceeding $2,000 in total).",
+    "retrieval": {
+      "full_recall": true,
+      "positions": {
+        "10": 1
+      }
+    },
+    "judge": {
+      "verdict": "correct",
+      "reasoning": "The system's answer includes the reference's core fact (first Monday of each month) plus additional consistent detail."
+    },
+    "trace": {
+      "vector_chunk_ids": [
+        "and Legal before travel begins, and failure to obtain approval may result in the employee bearing personal responsibility for any resulting tax liability. 6. Expense Reimbursement 6.1 General Limits Employees may claim reimbursement for reasonable business expenses, including client meals, local transportation, and approved software subscriptions. Client meal expenses up to $150 per event do not require pre-approval; amounts exceeding $150 require written approval from a manager prior to the expense being incurred. Expenses exceeding $2,000 in total are escalated to the Expense Review Committee, which meets on the first Monday of each month to evaluate larger requests. 6.2 Submission Deadlines All expense reports, regardless of category, must be submitted through the Expense Portal within 30 days of the expense date. Reports submitted after this window will not be reimbursed except in cases of documented travel delays or system outages affecting the Expense Portal itself. 7. Performance Management Formal performance",
+        "through the Expense Portal within 30 days of the expense date. Reports submitted after this window will not be reimbursed except in cases of documented travel delays or system outages affecting the Expense Portal itself. 7. Performance Management Formal performance reviews occur annually each October, with informal check-ins recommended on a quarterly basis between employees and their managers. Review outcomes feed into the following July's merit increase cycle described in Section 2. Employees whose performance falls below expectations may be placed on a Performance Improvement Plan (PIP) by their manager, in consultation with People Operations. A PIP typically runs for 60 to 90 days and includes specific, measurable goals. Employees on an active PIP are not eligible for the annual performance bonus described in Section 2, nor for consideration in the mid-year promotion cycle, until the PIP has been successfully closed by their manager. 8. New Hire Orientation & Company",
+        "to maintain core collaboration hours between 10am and 3pm in their assigned time zone, and to remain reachable via company messaging tools during standard business hours. Managers are encouraged to set team-level norms that go beyond this minimum where collaboration needs require it, and teams that work across more than two time zones are encouraged to document their agreed-upon overlap hours in their team charter. Employees who wish to work temporarily from outside their home country for personal travel may do so for up to 20 consecutive days per calendar year without triggering additional tax residency documentation; extended stays beyond this threshold require prior written approval from both People Operations and Legal before travel begins, and failure to obtain approval may result in the employee bearing personal responsibility for any resulting tax liability. 6. Expense Reimbursement 6.1 General Limits Employees may claim reimbursement for reasonable business expenses, including client meals,",
+        "Meridian employees. It is reviewed annually by People Operations and Legal, and employees are notified by email whenever a material change is made. Meridian's culture is built around three principles: craftsmanship, accountability, and mutual trust. We expect every employee to take ownership of their work, communicate openly about setbacks, and treat colleagues with the same care they would want extended to themselves. These principles inform how we approach everything from performance management to time off, and they are referenced throughout this handbook. 2. Compensation & Pay Structure Meridian pays all employees on a semi-monthly basis, on the 15th and last business day of each month. Base salaries are set according to leveled pay bands that are reviewed annually against external market data. Employees may request a summary of their pay band placement from their manager or People Operations at any time. All full-time employees in good standing are eligible for",
+        "deposited each pay period alongside the employee's own contribution. All employees and their household members have access to the company's EAP, which provides confidential counseling sessions, financial planning consultations, and legal referrals at no cost. The EAP can be reached 24 hours a day through the number listed on the internal benefits portal, and usage is never reported to managers or People Operations in identifiable form. 5. Remote Work Policy Meridian supports a flexible approach to remote work, recognizing that a distributed, trust-based culture improves both morale and output while maintaining the collaborative spirit that has defined our engineering teams since the company's founding. Remote and hybrid employees are expected to maintain core collaboration hours between 10am and 3pm in their assigned time zone, and to remain reachable via company messaging tools during standard business hours. Managers are encouraged to set team-level norms that go beyond this minimum where collaboration",
+        "to leveled pay bands that are reviewed annually against external market data. Employees may request a summary of their pay band placement from their manager or People Operations at any time. All full-time employees in good standing are eligible for the annual performance bonus, paid each March, equal to up to 10% of base salary depending on individual and company performance that year. Bonus percentages are communicated individually and are not guaranteed to be uniform across teams. Part-time and contract employees are not eligible for the annual bonus program under any circumstances. Annual merit increases, where applicable, are effective each July and are communicated alongside the employee's midyear check-in. Merit increases and the annual bonus are evaluated separately and one does not guarantee the other. 3. Time Off Policies 3.1 Flexible Time Off (FTO) Full-time employees hired on or after January 2019 accrue Flexible Time Off (FTO) rather than traditional"
+      ],
+      "keyword_chunk_ids": [
+        "and Legal before travel begins, and failure to obtain approval may result in the employee bearing personal responsibility for any resulting tax liability. 6. Expense Reimbursement 6.1 General Limits Employees may claim reimbursement for reasonable business expenses, including client meals, local transportation, and approved software subscriptions. Client meal expenses up to $150 per event do not require pre-approval; amounts exceeding $150 require written approval from a manager prior to the expense being incurred. Expenses exceeding $2,000 in total are escalated to the Expense Review Committee, which meets on the first Monday of each month to evaluate larger requests. 6.2 Submission Deadlines All expense reports, regardless of category, must be submitted through the Expense Portal within 30 days of the expense date. Reports submitted after this window will not be reimbursed except in cases of documented travel delays or system outages affecting the Expense Portal itself. 7. Performance Management Formal performance"
+      ],
+      "fused_chunk_ids": [
+        10,
+        11,
+        9,
+        2,
+        8,
+        3
+      ],
+      "reranked_chunk_ids": [
+        10,
+        11,
+        9
+      ],
+      "first_answer": "The Expense Review Committee meets on the first Monday of each month to evaluate larger requests (expenses exceeding $2,000 in total).",
+      "verification": {
+        "grounded": true,
+        "issue": "none",
+        "reasoning": "The answer accurately restates the context: the Expense Review Committee meets the first Monday of each month to evaluate expenses exceeding $2,000 in total, exactly as stated in section 6.1."
+      },
+      "retried": false
+    }
+  }
+]
