@@ -1,9 +1,11 @@
+import { AnimatePresence, motion } from 'motion/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import './app.css'
 import { api, type AskResponse } from './api'
 import { Hero, type Mode, type Source } from './components/Hero'
 import { Walkthrough } from './components/Scenes'
 import { Upload } from './components/Upload'
+import { spring, springSoft } from './motion'
 
 type Theme = 'light' | 'dark' | 'system'
 
@@ -94,16 +96,27 @@ export default function App() {
 
   return (
     <>
-      <button
+      <motion.button
         className="theme-toggle"
         onClick={cycleTheme}
         aria-label={`Theme: ${theme}. Click to change.`}
         title={`Theme: ${theme}`}
+        whileTap={{ scale: 0.9 }}
+        transition={spring}
       >
-        <span aria-hidden="true">
-          {theme === 'light' ? '☀' : theme === 'dark' ? '☾' : '◐'}
-        </span>
-      </button>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.span
+            key={theme}
+            aria-hidden="true"
+            initial={{ opacity: 0, rotate: -70, scale: 0.6 }}
+            animate={{ opacity: 1, rotate: 0, scale: 1 }}
+            exit={{ opacity: 0, rotate: 70, scale: 0.6 }}
+            transition={spring}
+          >
+            {theme === 'light' ? '☀' : theme === 'dark' ? '☾' : '◐'}
+          </motion.span>
+        </AnimatePresence>
+      </motion.button>
 
       <Hero
         mode={mode}
@@ -135,12 +148,22 @@ export default function App() {
         }}
       />
 
-      {loading ? (
-        <div className="running" role="status">
-          <span className="spinner" aria-hidden="true" />
-          Working through the pipeline...
-        </div>
-      ) : null}
+      <AnimatePresence>
+        {loading ? (
+          <motion.div
+            className="running"
+            role="status"
+            key="running"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={springSoft}
+          >
+            <span className="spinner" aria-hidden="true" />
+            Working through the pipeline...
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
 
       {mode === 'upload' && !result && !loading ? (
         <Upload

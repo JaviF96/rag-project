@@ -1,4 +1,6 @@
+import { motion } from 'motion/react'
 import { useId, useState } from 'react'
+import { useMotionSafe } from '../motion'
 
 /* ---------------------------------------------------------------------------
    Shared chart primitives.
@@ -7,6 +9,10 @@ import { useId, useState } from 'react'
    the baseline, hairline recessive axes, a 2px surface gap between adjacent
    fills, direct labels rather than a number on every point, and text in ink
    tokens rather than the series colour.
+
+   Marks animate from their own baseline via motion, so a bar grows out of the
+   axis and a dot arrives at its true position -- never a scale that would
+   misrepresent the value mid-flight.
 --------------------------------------------------------------------------- */
 
 export type Series = 'vector' | 'keyword' | 'fused'
@@ -45,6 +51,7 @@ export function RankedBars({
   max?: number
   onHover?: (key: string | number | null) => void
 }) {
+  const { markTransition } = useMotionSafe()
   const domain = max ?? Math.max(...data.map((d) => d.value), 0)
 
   if (data.length === 0) {
@@ -58,17 +65,18 @@ export function RankedBars({
           key={d.key}
           className={`bar-row${d.muted ? ' is-muted' : ''}`}
           onMouseEnter={() => onHover?.(d.key)}
-          style={{ ['--i' as string]: i } as React.CSSProperties}
         >
           <span className="bar-rank tnum">{i + 1}</span>
           <span className="bar-label mono">{d.label}</span>
           <div className="bar-track">
-            <div
+            <motion.div
               className="bar-fill"
-              style={{
+              style={{ background: SERIES_VAR[series] }}
+              initial={{ width: 0 }}
+              animate={{
                 width: domain > 0 ? `${Math.max((d.value / domain) * 100, 1.5)}%` : '0%',
-                background: SERIES_VAR[series],
               }}
+              transition={{ ...markTransition, delay: i * 0.05 }}
             />
           </div>
           <span className="bar-value tnum">{d.display}</span>
@@ -106,6 +114,8 @@ export function DotPlot({
   lowerIsBetter?: boolean
   onHover?: (key: number | null) => void
 }) {
+  const { markTransition, reduced } = useMotionSafe()
+
   if (data.length === 0) {
     return <p className="empty">No chunk matched at this stage.</p>
   }
@@ -123,19 +133,16 @@ export function DotPlot({
   return (
     <div className="dotplot" onMouseLeave={() => onHover?.(null)}>
       {data.map((d, i) => (
-        <div
-          key={d.key}
-          className="dot-row"
-          onMouseEnter={() => onHover?.(d.key)}
-          style={{ ['--i' as string]: i } as React.CSSProperties}
-        >
+        <div key={d.key} className="dot-row" onMouseEnter={() => onHover?.(d.key)}>
           <span className="bar-rank tnum">{i + 1}</span>
           <span className="bar-label mono">{d.label}</span>
           <div className="dot-track">
             <span className="dot-rule" />
-            <span
+            <motion.span
               className="dot-mark"
-              style={{ left: `${pct(d.value)}%` }}
+              initial={reduced ? { opacity: 0 } : { left: '0%', opacity: 0 }}
+              animate={{ left: `${pct(d.value)}%`, opacity: 1 }}
+              transition={{ ...markTransition, delay: i * 0.055 }}
               title={`${d.label}: ${d.value.toFixed(4)}`}
             />
           </div>
@@ -154,7 +161,7 @@ export function DotPlot({
         <span />
       </div>
       <p className="axis-caption">
-        {axisLabel} &mdash; {lowerIsBetter ? 'further left is closer' : 'further right is stronger'}
+        {axisLabel} - {lowerIsBetter ? 'further left is closer' : 'further right is stronger'}
       </p>
     </div>
   )
@@ -164,6 +171,7 @@ export function DotPlot({
 
 export function VectorHeatmap({ values }: { values: number[] }) {
   const [hover, setHover] = useState<number | null>(null)
+  const { reduced } = useMotionSafe()
   // Symmetric domain so zero sits at the midpoint of the diverging scale.
   const extent = Math.max(...values.map(Math.abs), 1e-6)
 
@@ -174,12 +182,18 @@ export function VectorHeatmap({ values }: { values: number[] }) {
           const t = v / extent
           // Diverging: cool for negative, warm for positive, near-surface at zero.
           const color = t >= 0 ? 'var(--keyword)' : 'var(--vector)'
+          const target = 0.15 + Math.abs(t) * 0.85
           return (
-            <span
+            <motion.span
               key={i}
               className={`heat-cell${hover === i ? ' is-on' : ''}`}
               onMouseEnter={() => setHover(i)}
-              style={{ background: color, opacity: 0.15 + Math.abs(t) * 0.85 }}
+              style={{ background: color }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: target }}
+              transition={
+                reduced ? { duration: 0 } : { duration: 0.4, delay: i * 0.012 }
+              }
             />
           )
         })}
@@ -211,11 +225,14 @@ export function ProjectionPlot({
   labelFor: (chunkId: number) => string
 }) {
   const clipId = useId().replace(/:/g, '')
+  const { reduced, markTransition } = useMotionSafe()
   const size = 320
   const pad = 34
   const inner = size - pad * 2
   const toX = (x: number) => pad + ((x + 1) / 2) * inner
   const toY = (y: number) => pad + (1 - (y + 1) / 2) * inner
+  const qx = toX(question[0])
+  const qy = toY(question[1])
 
   return (
     <figure className="figure">
@@ -250,38 +267,44 @@ export function ProjectionPlot({
         {/* Marks are clipped to the frame; labels deliberately are not, so a
             point near an edge keeps a readable label instead of a fragment. */}
         <g clipPath={`url(#${clipId})`}>
-          {chunks.map((c) => {
+          {chunks.map((c, i) => {
             const on = highlight === c.chunk_id
             return (
               <g key={c.chunk_id}>
-                <line
-                  x1={toX(question[0])}
-                  y1={toY(question[1])}
+                <motion.line
+                  x1={qx}
+                  y1={qy}
                   x2={toX(c.x)}
                   y2={toY(c.y)}
                   stroke="var(--grid)"
                   strokeWidth="1"
-                  opacity={on ? 0.95 : 0.35}
+                  initial={reduced ? { opacity: 0 } : { pathLength: 0, opacity: 0 }}
+                  animate={{ pathLength: 1, opacity: on ? 0.95 : 0.35 }}
+                  transition={{ ...markTransition, delay: 0.15 + i * 0.05 }}
                 />
                 {/* 2px surface ring keeps overlapping markers separable. */}
-                <circle
+                <motion.circle
                   cx={toX(c.x)}
                   cy={toY(c.y)}
-                  r={on ? 8 : 6}
                   fill="var(--fused)"
                   stroke="var(--surface)"
                   strokeWidth="2"
+                  initial={{ r: 0 }}
+                  animate={{ r: on ? 8 : 6 }}
+                  transition={{ ...markTransition, delay: 0.25 + i * 0.05 }}
                 />
               </g>
             )
           })}
-          <circle
-            cx={toX(question[0])}
-            cy={toY(question[1])}
-            r="7"
+          <motion.circle
+            cx={qx}
+            cy={qy}
             fill="var(--surface)"
             stroke="var(--ink)"
             strokeWidth="2.5"
+            initial={{ r: 0 }}
+            animate={{ r: 7 }}
+            transition={markTransition}
           />
         </g>
 
@@ -301,13 +324,12 @@ export function ProjectionPlot({
         })}
         {(() => {
           // Keep the label inside the viewBox when the question sits near an edge.
-          const qx = toX(question[0])
           const anchor = qx < 46 ? 'start' : qx > size - 46 ? 'end' : 'middle'
           const dx = anchor === 'start' ? -10 : anchor === 'end' ? 10 : 0
           return (
             <text
               x={qx + dx}
-              y={toY(question[1]) + 22}
+              y={qy + 22}
               className="scatter-label is-strong"
               textAnchor={anchor}
             >
@@ -344,6 +366,7 @@ export function RankSlope({
   fromLabel: string
   toLabel: string
 }) {
+  const { reduced, markTransition } = useMotionSafe()
   const rows = Math.max(...data.map((d) => d.from), 1)
   const h = rows * 44 + 46
   const w = 400
@@ -366,7 +389,7 @@ export function RankSlope({
           {toLabel}
         </text>
 
-        {data.map((d) => {
+        {data.map((d, i) => {
           const kept = d.to !== null
           const y1 = yFor(d.from)
           const y2 = kept ? yFor(d.to as number) : y1
@@ -374,14 +397,17 @@ export function RankSlope({
           return (
             <g key={d.key} className={kept ? 'slope-kept' : 'slope-dropped'}>
               {kept ? (
-                <path
+                <motion.path
                   d={`M ${leftX + 24} ${y1} C ${mid} ${y1}, ${mid} ${y2}, ${rightX - 24} ${y2}`}
                   fill="none"
                   stroke="var(--fused)"
                   strokeWidth="2"
+                  initial={reduced ? { opacity: 0 } : { pathLength: 0 }}
+                  animate={{ pathLength: 1, opacity: 1 }}
+                  transition={{ ...markTransition, delay: 0.1 + i * 0.09 }}
                 />
               ) : (
-                <line
+                <motion.line
                   x1={leftX + 24}
                   y1={y1}
                   x2={leftX + 54}
@@ -389,6 +415,9 @@ export function RankSlope({
                   stroke="var(--axis)"
                   strokeWidth="2"
                   strokeLinecap="round"
+                  initial={reduced ? { opacity: 0 } : { pathLength: 0 }}
+                  animate={{ pathLength: 1, opacity: 1 }}
+                  transition={{ ...markTransition, delay: 0.1 + i * 0.09 }}
                 />
               )}
               <text x={leftX} y={y1 + 4} className="slope-node mono" textAnchor="middle">
@@ -396,23 +425,29 @@ export function RankSlope({
               </text>
               {kept ? (
                 <>
-                  <text
+                  <motion.text
                     x={rightX}
                     y={y2 + 4}
                     className="slope-node mono is-kept"
                     textAnchor="middle"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3, delay: 0.5 + i * 0.09 }}
                   >
                     {d.label}
-                  </text>
+                  </motion.text>
                   {d.score !== null ? (
-                    <text
+                    <motion.text
                       x={rightX + 34}
                       y={y2 + 4}
                       className="slope-score tnum"
                       textAnchor="start"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3, delay: 0.56 + i * 0.09 }}
                     >
                       {d.score.toFixed(3)}
-                    </text>
+                    </motion.text>
                   ) : null}
                 </>
               ) : (

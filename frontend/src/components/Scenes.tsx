@@ -1,5 +1,7 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { motion } from 'motion/react'
+import { useState, type ReactNode } from 'react'
 import { STAGE_LABELS, STAGE_ORDER, type AskResponse } from '../api'
+import { springSoft, useMotionSafe } from '../motion'
 import {
   DotPlot,
   ProjectionPlot,
@@ -10,34 +12,6 @@ import {
   type DotDatum,
   type SlopeDatum,
 } from './charts'
-
-/** Reveals children once they scroll into view. Fires once, then disconnects. */
-function useReveal<T extends HTMLElement>() {
-  const ref = useRef<T>(null)
-  const [shown, setShown] = useState(false)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    if (!('IntersectionObserver' in window)) {
-      setShown(true)
-      return
-    }
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShown(true)
-          io.disconnect()
-        }
-      },
-      { rootMargin: '0px 0px -12% 0px', threshold: 0.15 },
-    )
-    io.observe(el)
-    return () => io.disconnect()
-  }, [])
-
-  return { ref, shown }
-}
 
 function Scene({
   index,
@@ -52,16 +26,27 @@ function Scene({
   aside?: ReactNode
   children: ReactNode
 }) {
-  const { ref, shown } = useReveal<HTMLElement>()
+  const { reduced } = useMotionSafe()
+  // The copy and the visual arrive a beat apart, so the eye lands on the
+  // explanation first and the chart resolves into it.
+  const enter = (delay: number) => ({
+    initial: reduced ? { opacity: 0 } : { opacity: 0, y: 26 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, amount: 0.2, margin: '0px 0px -10% 0px' },
+    transition: { ...springSoft, delay: reduced ? 0 : delay },
+  })
+
   return (
-    <section ref={ref} className={`scene${shown ? ' is-shown' : ''}`}>
-      <div className="scene-copy">
+    <section className="scene">
+      <motion.div className="scene-copy" {...enter(0)}>
         <span className="scene-index tnum">{String(index).padStart(2, '0')}</span>
         <h2>{title}</h2>
         <div className="scene-lede">{lede}</div>
         {aside ? <div className="scene-aside">{aside}</div> : null}
-      </div>
-      <div className="scene-viz">{children}</div>
+      </motion.div>
+      <motion.div className="scene-viz" {...enter(0.1)}>
+        {children}
+      </motion.div>
     </section>
   )
 }
@@ -118,13 +103,19 @@ export function Walkthrough({ result }: { result: AskResponse }) {
 
   return (
     <div id="walkthrough" className="walkthrough">
-      <div className="walkthrough-head">
+      <motion.div
+        className="walkthrough-head"
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.4 }}
+        transition={springSoft}
+      >
         <h2>How that answer was produced</h2>
         <p>
-          Every number below is from the query you just ran &mdash; scroll through the
+          Every number below is from the query you just ran - scroll through the
           seven stages the question passed through, and what each one cost.
         </p>
-      </div>
+      </motion.div>
 
       {/* ------------------------------------------------------------ 1 */}
       <Scene
@@ -174,7 +165,7 @@ export function Walkthrough({ result }: { result: AskResponse }) {
               <strong>{s.vector_search.top_k}</strong>.
             </p>
             <p>
-              This finds meaning rather than wording &mdash; which is its strength and
+              This finds meaning rather than wording, which is its strength and
               also its weakness. It has no special respect for exact terms, names, or
               acronyms.
             </p>
@@ -183,7 +174,7 @@ export function Walkthrough({ result }: { result: AskResponse }) {
         aside={
           <p className="muted">
             Distances land in a narrow band, so these are plotted as positions on a
-            shared axis rather than bars &mdash; the differences are what matter.
+            shared axis rather than bars - the differences are what matter.
           </p>
         }
       >
@@ -213,7 +204,7 @@ export function Walkthrough({ result }: { result: AskResponse }) {
             </p>
             <p>
               {keywordEmpty ? (
-                <>This question produced no keyword matches at all &mdash; so fusion
+                <>This question produced no keyword matches at all, so fusion
                 below has only one list to work with.</>
               ) : (
                 <>
@@ -238,7 +229,7 @@ export function Walkthrough({ result }: { result: AskResponse }) {
           <>
             <p>
               The two searches produce scores that mean completely different things
-              &mdash; a distance and a term-frequency rank can&rsquo;t be added together.
+              - a distance and a term-frequency rank can&rsquo;t be added together.
               Reciprocal Rank Fusion sidesteps this by throwing the scores away and
               keeping only the <strong>positions</strong>.
             </p>
@@ -264,7 +255,7 @@ export function Walkthrough({ result }: { result: AskResponse }) {
             <span role="columnheader">Contributions</span>
             <span role="columnheader">Score</span>
           </div>
-          {s.fusion.candidates.map((c) => {
+          {s.fusion.candidates.map((c, i) => {
             const total = s.fusion.candidates[0]?.score || 1
             return (
               <div
@@ -274,27 +265,29 @@ export function Walkthrough({ result }: { result: AskResponse }) {
               >
                 <span className="mono" role="cell">{label(c.chunk_index)}</span>
                 <span className="tnum sub" role="cell">
-                  {c.vector_rank ? `#${c.vector_rank}` : '—'}
+                  {c.vector_rank ? `#${c.vector_rank}` : '-'}
                 </span>
                 <span className="tnum sub" role="cell">
-                  {c.keyword_rank ? `#${c.keyword_rank}` : '—'}
+                  {c.keyword_rank ? `#${c.keyword_rank}` : '-'}
                 </span>
                 <span className="stack" role="cell">
                   {/* 2px surface gap between the two fills, per mark spec. */}
-                  <span
+                  <motion.span
                     className="stack-seg"
-                    style={{
-                      width: `${(c.vector_contribution / total) * 100}%`,
-                      background: 'var(--vector)',
-                    }}
+                    style={{ background: 'var(--vector)' }}
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${(c.vector_contribution / total) * 100}%` }}
+                    viewport={{ once: true, amount: 0.5 }}
+                    transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: i * 0.05 }}
                     title={`vector ${c.vector_contribution.toFixed(5)}`}
                   />
-                  <span
+                  <motion.span
                     className="stack-seg"
-                    style={{
-                      width: `${(c.keyword_contribution / total) * 100}%`,
-                      background: 'var(--keyword)',
-                    }}
+                    style={{ background: 'var(--keyword)' }}
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${(c.keyword_contribution / total) * 100}%` }}
+                    viewport={{ once: true, amount: 0.5 }}
+                    transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.06 + i * 0.05 }}
                     title={`keyword ${c.keyword_contribution.toFixed(5)}`}
                   />
                 </span>
@@ -318,7 +311,7 @@ export function Walkthrough({ result }: { result: AskResponse }) {
             <p>
               Fusion still only knows about positions. A reranker actually reads the
               question together with each chunk and scores how well it answers it
-              &mdash; far more accurate, and far too slow to run over the whole corpus.
+              - far more accurate, and far too slow to run over the whole corpus.
             </p>
             <p>
               So it runs last, on{' '}
@@ -402,7 +395,7 @@ export function Walkthrough({ result }: { result: AskResponse }) {
           {s.retry.occurred ? (
             <div className="retry-diff">
               <div>
-                <span className="label is-bad">First attempt &mdash; rejected</span>
+                <span className="label is-bad">First attempt - rejected</span>
                 <p>{s.generate.answer}</p>
               </div>
               <div>
@@ -427,12 +420,12 @@ export function Walkthrough({ result }: { result: AskResponse }) {
           <>
             <p>
               All seven stages, measured. The shape is the point: everything on the
-              retrieval side &mdash; embedding, both searches, fusion and reranking
-              &mdash; accounts for{' '}
+              retrieval side - embedding, both searches, fusion and reranking
+              - accounts for{' '}
               <strong>{retrievalShare}%</strong> of the total.
             </p>
             <p>
-              The two model calls dominate. Assembling the prompt is free &mdash; it
+              The two model calls dominate. Assembling the prompt is free - it
               is just string concatenation. That is why retrieval quality is worth
               optimising for accuracy rather than speed, and why the verification pass
               roughly doubles the wait.
@@ -452,19 +445,16 @@ export function Walkthrough({ result }: { result: AskResponse }) {
             const ms = result.timings[stage] ?? 0
             const isModel = stage === 'generate' || stage === 'verify'
             return (
-              <div
-                key={stage}
-                className="timing-row"
-                style={{ ['--i' as string]: i } as React.CSSProperties}
-              >
+              <div key={stage} className="timing-row">
                 <span className="timing-label">{STAGE_LABELS[stage]}</span>
                 <div className="timing-track">
-                  <div
+                  <motion.div
                     className="timing-fill"
-                    style={{
-                      width: `${Math.max((ms / maxTiming) * 100, 0.8)}%`,
-                      background: isModel ? 'var(--keyword)' : 'var(--vector)',
-                    }}
+                    style={{ background: isModel ? 'var(--keyword)' : 'var(--vector)' }}
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${Math.max((ms / maxTiming) * 100, 0.8)}%` }}
+                    viewport={{ once: true, amount: 0.4 }}
+                    transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: i * 0.06 }}
                   />
                 </div>
                 <span className="timing-ms tnum">

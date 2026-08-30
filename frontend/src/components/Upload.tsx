@@ -1,5 +1,7 @@
+import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import { api, type UploadResponse } from '../api'
+import { springSoft, useMotionSafe } from '../motion'
 
 /**
  * Ingestion panel. Uploads are scoped to this browser session, so a visitor's
@@ -35,9 +37,16 @@ export function Upload({
     }
   }
 
+  const { reduced } = useMotionSafe()
+
   return (
     <section className="upload">
-      <div className="upload-inner">
+      <motion.div
+        className="upload-inner"
+        initial={reduced ? { opacity: 0 } : { opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={springSoft}
+      >
         <h2>Use your own document</h2>
         <p className="upload-lede">
           Add a PDF and it goes through the same pipeline. It is scoped to your
@@ -71,18 +80,34 @@ export function Upload({
           </p>
         ) : null}
 
-        {result ? (
-          <div className="upload-done">
-            <button className="btn-primary" onClick={() => onIngested(result)}>
-              Ask a question about it
-            </button>
-          </div>
-        ) : (
-          <button className="link-back" onClick={onBack}>
-            Or use the sample document instead
-          </button>
-        )}
-      </div>
+        <AnimatePresence mode="wait" initial={false}>
+          {result ? (
+            <motion.div
+              className="upload-done"
+              key="done"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={springSoft}
+            >
+              <button className="btn-primary" onClick={() => onIngested(result)}>
+                Ask a question about it
+              </button>
+            </motion.div>
+          ) : (
+            <motion.button
+              className="link-back"
+              key="back"
+              onClick={onBack}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              Or use the sample document instead
+            </motion.button>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </section>
   )
 }

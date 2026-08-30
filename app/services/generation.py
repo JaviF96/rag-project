@@ -16,7 +16,7 @@ class LLMError(RuntimeError):
 def build_prompt(chunks: list[str], question: str) -> str:
     context = "\n\n".join(chunks)
     return f"""Answer the question using only the context below.
-If the context doesn't contain enough information to answer, say so — don't guess.
+If the context doesn't contain enough information to answer, say so - don't guess.
 
 Context:
 {context}

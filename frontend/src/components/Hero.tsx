@@ -1,5 +1,7 @@
+import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { AskResponse } from '../api'
+import { spring, springSoft, useMotionSafe } from '../motion'
 
 const SUGGESTIONS = [
   'Can someone on an active PIP be considered for a mid-year promotion?',
@@ -53,6 +55,15 @@ export function Hero({
   const [question, setQuestion] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   const ownDocument = source === 'own'
+  const { variants, stagger: staggerFor } = useMotionSafe()
+
+  // One shared enter/exit for the mutually exclusive hero panels, so switching
+  // between them reads as a single surface changing rather than a swap.
+  const panel = {
+    initial: { opacity: 0, y: 12 },
+    animate: { opacity: 1, y: 0, transition: springSoft },
+    exit: { opacity: 0, y: -8, transition: { duration: 0.18 } },
+  }
 
   useEffect(() => {
     if (mode === 'ask') inputRef.current?.focus()
@@ -64,136 +75,167 @@ export function Hero({
 
   return (
     <header className={`hero${compact ? ' is-compact' : ''}`}>
-      <div className="hero-inner">
-        <p className="eyebrow">Retrieval-augmented generation</p>
-        <h1 className="hero-title">
+      <motion.div
+        className="hero-inner"
+        variants={staggerFor(0.08)}
+        initial="hidden"
+        animate="show"
+      >
+        <motion.p className="eyebrow" variants={variants}>
+          Retrieval-augmented generation
+        </motion.p>
+        <motion.h1 className="hero-title" variants={variants}>
           Ask a question. Watch every step{' '}
           <br className="title-break" />
           the system takes to answer it.
-        </h1>
-        <p className="hero-sub">
+        </motion.h1>
+        <motion.p className="hero-sub" variants={variants}>
           A working RAG pipeline over a PDF document. Ask it something, then open it
           up and see exactly how the answer was found.
-        </p>
+        </motion.p>
 
-        {mode === 'idle' && !result ? (
-          <div className="hero-actions">
-            <button className="btn-primary" onClick={() => setMode('ask')}>
-              Try a sample
-            </button>
-            <button className="btn-ghost" onClick={() => setMode('upload')}>
-              Upload your own document
-            </button>
-          </div>
-        ) : null}
-
-        {mode === 'ask' && !result && !loading ? (
-          <div className="ask-panel">
-            {ownDocument && documentName ? (
-              <p className="ask-target">
-                Asking about <strong>{documentName}</strong>
-              </p>
-            ) : null}
-
-            <div className="ask">
-              <input
-                ref={inputRef}
-                type="text"
-                value={question}
-                placeholder={
-                  ownDocument
-                    ? 'Ask something about your document...'
-                    : 'Ask something about the sample document...'
-                }
-                onChange={(e) => setQuestion(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && submit()}
-                aria-label="Your question"
-              />
-              <button className="btn-primary" onClick={submit} disabled={!question.trim()}>
-                Run the pipeline
+        <AnimatePresence mode="wait" initial={false}>
+          {mode === 'idle' && !result ? (
+            <motion.div className="hero-actions" key="actions" {...panel}>
+              <button className="btn-primary" onClick={() => setMode('ask')}>
+                Use the sample document
               </button>
-            </div>
+              <button className="btn-ghost" onClick={() => setMode('upload')}>
+                Upload your own document
+              </button>
+            </motion.div>
+          ) : null}
 
-            {/* The sample prompts only make sense against the sample document. */}
-            {!ownDocument ? (
-              <>
-                <p className="ask-hint">Or start from one of these:</p>
-                <div className="suggestions">
-                  {SUGGESTIONS.map((s) => (
-                    <button
-                      key={s}
-                      className="chip"
-                      // Fills the input only -- running the pipeline stays an explicit
-                      // action, since each run costs several model calls.
-                      onClick={() => {
-                        setQuestion(s)
-                        inputRef.current?.focus()
-                      }}
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              </>
-            ) : null}
+          {mode === 'ask' && !result && !loading ? (
+            <motion.div className="ask-panel" key="ask" {...panel}>
+              {ownDocument && documentName ? (
+                <p className="ask-target">
+                  Asking about <strong>{documentName}</strong>
+                </p>
+              ) : null}
 
-            {/* An uploaded document stays ingested, so switching is two-way. */}
-            <div className="ask-switch">
-              {ownDocument ? (
-                <button className="link-back" onClick={onUseDemo}>
-                  Or use the sample document instead
+              <div className="ask">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={question}
+                  placeholder={
+                    ownDocument
+                      ? 'Ask something about your document...'
+                      : 'Ask something about the sample document...'
+                  }
+                  onChange={(e) => setQuestion(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && submit()}
+                  aria-label="Your question"
+                />
+                <button
+                  className="btn-primary"
+                  onClick={submit}
+                  disabled={!question.trim()}
+                >
+                  Run the pipeline
                 </button>
-              ) : (
+              </div>
+
+              {/* The sample prompts only make sense against the sample document. */}
+              {!ownDocument ? (
                 <>
-                  {documentName ? (
-                    <button className="link-back" onClick={onUseOwn}>
-                      Or ask about {documentName} again
-                    </button>
-                  ) : null}
-                  <button className="link-back" onClick={() => setMode('upload')}>
-                    {documentName
-                      ? 'Upload a different document'
-                      : 'Or upload your own document instead'}
-                  </button>
+                  <p className="ask-hint">Or start from one of these:</p>
+                  <motion.div
+                    className="suggestions"
+                    variants={staggerFor(0.045, 0.05)}
+                    initial="hidden"
+                    animate="show"
+                  >
+                    {SUGGESTIONS.map((s) => (
+                      <motion.button
+                        key={s}
+                        className="chip"
+                        variants={variants}
+                        // Fills the input only -- running the pipeline stays an
+                        // explicit action, since each run costs several model calls.
+                        onClick={() => {
+                          setQuestion(s)
+                          inputRef.current?.focus()
+                        }}
+                      >
+                        {s}
+                      </motion.button>
+                    ))}
+                  </motion.div>
                 </>
-              )}
-            </div>
-          </div>
-        ) : null}
+              ) : null}
+
+              {/* An uploaded document stays ingested, so switching is two-way. */}
+              <div className="ask-switch">
+                {ownDocument ? (
+                  <button className="link-back" onClick={onUseDemo}>
+                    Or use the sample document instead
+                  </button>
+                ) : (
+                  <>
+                    {documentName ? (
+                      <button className="link-back" onClick={onUseOwn}>
+                        Or ask about {documentName} again
+                      </button>
+                    ) : null}
+                    <button className="link-back" onClick={() => setMode('upload')}>
+                      {documentName
+                        ? 'Upload a different document'
+                        : 'Or upload your own document instead'}
+                    </button>
+                  </>
+                )}
+              </div>
+            </motion.div>
+          ) : null}
+
+          {result ? (
+            <motion.div className="answer-card" key="answer" {...panel}>
+              <p className="answer-question">{result.question}</p>
+              <motion.p
+                className="answer-text"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.12, duration: 0.45 }}
+              >
+                {result.answer}
+              </motion.p>
+              <motion.div
+                className="answer-actions"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ ...spring, delay: 0.22 }}
+              >
+                {!revealed ? (
+                  <button className="btn-primary btn-reveal" onClick={onReveal}>
+                    See how it works <span aria-hidden="true">{'↓'}</span>
+                  </button>
+                ) : (
+                  <a className="btn-ghost" href="#walkthrough">
+                    Back to the walkthrough <span aria-hidden="true">{'↓'}</span>
+                  </a>
+                )}
+                <button
+                  className="link-back"
+                  onClick={() => {
+                    setQuestion('')
+                    onAskAnother()
+                  }}
+                >
+                  Ask another question
+                </button>
+              </motion.div>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
 
         {error ? (
           <p className="error" role="alert">
             {error}
           </p>
         ) : null}
-
-        {result ? (
-          <div className="answer-card">
-            <p className="answer-question">{result.question}</p>
-            <p className="answer-text">{result.answer}</p>
-            <div className="answer-actions">
-              {!revealed ? (
-                <button className="btn-primary btn-reveal" onClick={onReveal}>
-                  See how it works <span aria-hidden="true">{'↓'}</span>
-                </button>
-              ) : (
-                <a className="btn-ghost" href="#walkthrough">
-                  Back to the walkthrough <span aria-hidden="true">{'↓'}</span>
-                </a>
-              )}
-              <button
-                className="link-back"
-                onClick={() => {
-                  setQuestion('')
-                  onAskAnother()
-                }}
-              >
-                Ask another question
-              </button>
-            </div>
-          </div>
-        ) : null}
-      </div>
+      </motion.div>
     </header>
   )
 }
