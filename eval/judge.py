@@ -1,5 +1,13 @@
-import json
-from app.services.generation import call_claude, parse_json_response
+from typing import Literal
+
+from pydantic import BaseModel
+
+from app.services.generation import LLMError, call_claude_structured
+
+
+class Judgement(BaseModel):
+    verdict: Literal["correct", "partial", "incorrect"]
+    reasoning: str
 
 
 def build_judge_prompt(question: str, reference_answer: str, system_answer: str) -> str:
@@ -11,13 +19,12 @@ def build_judge_prompt(question: str, reference_answer: str, system_answer: str)
 
     System's answer: {system_answer}
 
-    Determine whether the system's answer is correct, partially correct, or incorrect, compared to the reference answer. Respond with ONLY a JSON object, no other text, no markdown code fences, in exactly this format:
-    {{"verdict": "correct", "reasoning": "brief explanation"}}
+    Determine whether the system's answer is correct, partially correct, or incorrect, compared to the reference answer."""
 
-    The verdict must be exactly one of: "correct", "partial", "incorrect\""""
 
 def judge_answer(question: str, reference_answer: str, system_answer: str) -> dict:
     prompt = build_judge_prompt(question, reference_answer, system_answer)
-    response_text = call_claude(prompt)
-    
-    return parse_json_response(response_text)
+    try:
+        return call_claude_structured(prompt, Judgement).model_dump()
+    except LLMError as e:
+        return {"verdict": "error", "reasoning": str(e)}
