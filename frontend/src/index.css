@@ -1,111 +1,134 @@
+/* ---------------------------------------------------------------------------
+   Design tokens.
+
+   Palette values come from the validated data-viz reference palette. The three
+   series hues (blue / orange / aqua) were validated all-pairs in both modes:
+   worst CVD dE 9.2 light, 9.4 dark; worst normal-vision dE 24.0 light, 20.9
+   dark. Light-mode aqua sits below 3:1 on the light surface, so every aqua mark
+   in this app carries a visible text label rather than relying on hue alone.
+
+   Dark values are declared twice on purpose: the media query follows the OS
+   setting, the [data-theme] scope follows the in-app toggle, and the toggle
+   must be able to win in both directions.
+--------------------------------------------------------------------------- */
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --surface:        #fcfcfb;
+  --plane:          #f9f9f7;
+  --raised:         #ffffff;
+  --ink:            #0b0b0b;
+  --ink-2:          #52514e;
+  --ink-muted:      #898781;
+  --grid:           #e1e0d9;
+  --axis:           #c3c2b7;
+  --hairline:       rgba(11, 11, 11, 0.10);
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --vector:         #2a78d6;
+  --keyword:        #eb6834;
+  --fused:          #1baf7a;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --good:           #0ca30c;
+  --critical:       #d03b3b;
+  --warning:        #fab219;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  --sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Consolas, monospace;
+
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 14px;
+
+  /* A single easing shared by every transition keeps the motion coherent. */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  color-scheme: light;
+  background: var(--plane);
+  color: var(--ink-2);
+  font-family: var(--sans);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
+  :root:where(:not([data-theme='light'])) {
+    color-scheme: dark;
+    --surface:  #1a1a19;
+    --plane:    #0d0d0d;
+    --raised:   #212120;
+    --ink:      #ffffff;
+    --ink-2:    #c3c2b7;
+    --grid:     #2c2c2a;
+    --axis:     #383835;
+    --hairline: rgba(255, 255, 255, 0.10);
+    --vector:   #3987e5;
+    --keyword:  #d95926;
+    --fused:    #199e70;
   }
 }
 
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --surface:  #1a1a19;
+  --plane:    #0d0d0d;
+  --raised:   #212120;
+  --ink:      #ffffff;
+  --ink-2:    #c3c2b7;
+  --grid:     #2c2c2a;
+  --axis:     #383835;
+  --hairline: rgba(255, 255, 255, 0.10);
+  --vector:   #3987e5;
+  --keyword:  #d95926;
+  --fused:    #199e70;
+}
+
+* { box-sizing: border-box; }
+
+/* Lets the hero grow to fill the viewport on the idle page, so its background
+   gradient reaches the bottom edge instead of stopping in a band. */
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  background: var(--plane);
+  color: var(--ink-2);
+  font: 16px/1.6 var(--sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
+h1, h2, h3 {
+  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: -0.02em;
   margin: 0;
+  line-height: 1.15;
 }
 
-code,
-.counter {
+p { margin: 0; }
+
+button {
+  font: inherit;
+  cursor: pointer;
+  color: inherit;
+}
+
+code, .mono, .tnum {
   font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+  font-variant-numeric: tabular-nums;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+:focus-visible {
+  outline: 2px solid var(--vector);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

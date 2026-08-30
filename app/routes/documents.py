@@ -2,16 +2,17 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from fastapi import APIRouter, HTTPException, UploadFile, File
-from app.services.extraction import extract_text_from_pdf
+import uuid
+
+from fastapi import APIRouter, File, Header, HTTPException, UploadFile
+
+from app.schemas import QuestionRequest
 from app.services.chunking import chunk_text
 from app.services.embedding import embed_chunks
-from app.services.storage import save_chunks
-from app.schemas import QuestionRequest
+from app.services.extraction import extract_text_from_pdf
 from app.services.generation import LLMError
 from app.services.pipeline import run_pipeline
-
-import uuid
+from app.services.storage import count_chunks, save_chunks
 
 router = APIRouter()
 
@@ -23,7 +24,10 @@ MAX_UPLOAD_BYTES = 20 * 1024 * 1024  # 20 MB
 # the event loop and serialise every other request behind them; in a plain `def`
 # handler FastAPI runs them in its threadpool instead.
 @router.post("/documents")
-def upload_document(file: UploadFile = File(...)):
+def upload_document(
+    file: UploadFile = File(...),
+    x_session_id: str | None = Header(default=None),
+):
     if file.content_type != "application/pdf":
         raise HTTPException(
             status_code=415,
@@ -51,14 +55,38 @@ def upload_document(file: UploadFile = File(...)):
 
     chunks = chunk_text(text)
     embeddings = embed_chunks(chunks)
+    save_chunks(document_id, chunks, embeddings, session_id=x_session_id)
 
-    save_chunks(document_id, chunks, embeddings)
+    return {
+        "document_id": document_id,
+        "filename": file.filename,
+        "chunks_created": len(chunks),
+        "word_count": len(text.split()),
+        # The first few chunks let the UI show ingestion without a second round trip.
+        "sample_chunks": [
+            {"chunk_index": i, "text": c} for i, c in enumerate(chunks[:4])
+        ],
+    }
 
-    return {"document_id": document_id, "chunks_created": len(chunks)}
 
 @router.post("/ask")
-def ask_question(request: QuestionRequest):
+def ask_question(
+    request: QuestionRequest,
+    x_session_id: str | None = Header(default=None),
+):
+    if not request.question.strip():
+        raise HTTPException(status_code=400, detail="Question cannot be empty.")
     try:
-        return run_pipeline(request.question)
+        return run_pipeline(
+            request.question,
+            session_id=x_session_id,
+            document_id=request.document_id,
+        )
     except LLMError as e:
         raise HTTPException(status_code=502, detail=str(e)) from e
+
+
+@router.get("/corpus")
+def corpus_status(x_session_id: str | None = Header(default=None)):
+    """What the current session can currently retrieve over."""
+    return count_chunks(session_id=x_session_id)

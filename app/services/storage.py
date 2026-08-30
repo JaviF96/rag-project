@@ -1,82 +1,232 @@
+import os
+
 import psycopg2
 from pgvector.psycopg2 import register_vector
-import os
+
+# Visibility rule shared by both searches: the demo corpus (session_id IS NULL)
+# is visible to everyone, plus whatever the current session uploaded. Without
+# this, one visitor's upload joins every other visitor's retrieval.
+_VISIBLE = "(session_id IS NULL OR session_id = %s)"
+
+
+def _scope(document_id: str | None) -> tuple[str, list]:
+    """Visibility clause, optionally narrowed to a single document.
+
+    The session check is always applied, even when a document_id is given -- so
+    passing someone else's document_id matches nothing rather than leaking it.
+    """
+    if document_id:
+        return f"{_VISIBLE} AND document_id = %s", [document_id]
+    return _VISIBLE, []
+
 
 def get_connection():
     conn = psycopg2.connect(os.environ.get("DATABASE_URL"))
     register_vector(conn)
     return conn
 
-def save_chunks(document_id: str, chunks: list[str], embeddings: list[list[float]]):
-    conn = get_connection() 
-    cursor = conn.cursor()
 
-    for chunk, embedding in zip(chunks, embeddings):
-        cursor.execute(
-            "INSERT INTO chunks (document_id, chunk_text, embedding) VALUES (%s, %s, %s)",
-            (document_id, chunk, embedding)
+def save_chunks(
+    document_id: str,
+    chunks: list[str],
+    embeddings: list[list[float]],
+    session_id: str | None = None,
+) -> None:
+    conn = get_connection()
+    try:
+        with conn.cursor() as cursor:
+            for index, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
+                cursor.execute(
+                    """
+                    INSERT INTO chunks (document_id, chunk_index, chunk_text, embedding, session_id)
+                    VALUES (%s, %s, %s, %s, %s)
+                    ON CONFLICT (document_id, chunk_index) DO UPDATE
+                        SET chunk_text = EXCLUDED.chunk_text,
+                            embedding  = EXCLUDED.embedding
+                    """,
+                    (document_id, index, chunk, embedding, session_id),
+                )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def search_similar_chunks(
+    question_embedding: list[float],
+    top_k: int = 6,
+    session_id: str | None = None,
+    document_id: str | None = None,
+) -> list[dict]:
+    """Nearest neighbours by L2 distance, with the distance kept.
+
+    The distance is what makes the result explainable — returning bare IDs
+    throws away the only evidence of *why* a chunk ranked where it did.
+    """
+    where, extra = _scope(document_id)
+    conn = get_connection()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                f"""
+                SELECT id, document_id, chunk_index, chunk_text,
+                       embedding <-> %s::vector AS distance
+                FROM chunks
+                WHERE {where}
+                ORDER BY distance
+                LIMIT %s
+                """,
+                [question_embedding, session_id, *extra, top_k],
+            )
+            rows = cursor.fetchall()
+    finally:
+        conn.close()
+
+    return [
+        {
+            "chunk_id": cid,
+            "document_id": doc_id,
+            "chunk_index": idx,
+            "text": text,
+            "distance": float(distance),
+            "rank": rank,
+        }
+        for rank, (cid, doc_id, idx, text, distance) in enumerate(rows, start=1)
+    ]
+
+
+def search_keyword_chunks(
+    question: str,
+    top_k: int = 6,
+    session_id: str | None = None,
+    document_id: str | None = None,
+) -> list[dict]:
+    """Full-text search, with the ts_rank score kept.
+
+    plainto_tsquery ANDs every lexeme together, so a natural-language question
+    of ten words requires a chunk containing all ten and reliably matches
+    nothing. Rewriting the '&' operators to '|' gives OR semantics: a chunk
+    matches on any term, and ts_rank sorts by how many and how densely. The
+    rewrite goes through plainto_tsquery's own output, so the input is already
+    sanitised of tsquery operators.
+    """
+    where, extra = _scope(document_id)
+    conn = get_connection()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                f"""
+                WITH q AS (
+                    SELECT replace(plainto_tsquery('english', %s)::text, '&', '|')::tsquery AS query
+                )
+                SELECT id, document_id, chunk_index, chunk_text,
+                       ts_rank(to_tsvector('english', chunk_text), q.query) AS score
+                FROM chunks, q
+                WHERE to_tsvector('english', chunk_text) @@ q.query
+                  AND {where}
+                ORDER BY score DESC
+                LIMIT %s
+                """,
+                [question, session_id, *extra, top_k],
+            )
+            rows = cursor.fetchall()
+    finally:
+        conn.close()
+
+    return [
+        {
+            "chunk_id": cid,
+            "document_id": doc_id,
+            "chunk_index": idx,
+            "text": text,
+            "score": float(score),
+            "rank": rank,
+        }
+        for rank, (cid, doc_id, idx, text, score) in enumerate(rows, start=1)
+    ]
+
+
+def combine_with_rrf(
+    vector_results: list[dict],
+    keyword_results: list[dict],
+    k: int = 60,
+    top_k: int = 6,
+) -> list[dict]:
+    """Reciprocal Rank Fusion, returning the full working rather than just winners.
+
+    Each entry records where the chunk placed in each list and what that
+    contributed to its score, so the fusion arithmetic can be shown rather
+    than asserted.
+    """
+    vector_ranks = {r["chunk_id"]: r["rank"] for r in vector_results}
+    keyword_ranks = {r["chunk_id"]: r["rank"] for r in keyword_results}
+    sources = {r["chunk_id"]: r for r in vector_results + keyword_results}
+
+    fused = []
+    for chunk_id in vector_ranks.keys() | keyword_ranks.keys():
+        vector_rank = vector_ranks.get(chunk_id)
+        keyword_rank = keyword_ranks.get(chunk_id)
+        vector_contribution = 1 / (k + vector_rank) if vector_rank else 0.0
+        keyword_contribution = 1 / (k + keyword_rank) if keyword_rank else 0.0
+        source = sources[chunk_id]
+        fused.append(
+            {
+                "chunk_id": chunk_id,
+                "document_id": source["document_id"],
+                "chunk_index": source["chunk_index"],
+                "text": source["text"],
+                "vector_rank": vector_rank,
+                "keyword_rank": keyword_rank,
+                "vector_contribution": vector_contribution,
+                "keyword_contribution": keyword_contribution,
+                "score": vector_contribution + keyword_contribution,
+                "found_by_both": vector_rank is not None and keyword_rank is not None,
+            }
         )
 
-    conn.commit() 
-    cursor.close()
-    conn.close()
+    fused.sort(key=lambda item: item["score"], reverse=True)
+    for rank, item in enumerate(fused[:top_k], start=1):
+        item["rank"] = rank
+
+    return fused[:top_k]
 
 
-def search_similar_chunks(question_embedding: list[float], top_k: int = 6) -> list[tuple[str, str]]:
+def fetch_embeddings(chunk_ids: list[int]) -> dict[int, list[float]]:
+    """Load raw embeddings for the given chunks, for the 2D projection."""
+    if not chunk_ids:
+        return {}
+
     conn = get_connection()
-    cursor = conn.cursor()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                "SELECT id, embedding FROM chunks WHERE id = ANY(%s)", (list(chunk_ids),)
+            )
+            rows = cursor.fetchall()
+    finally:
+        conn.close()
 
-    cursor.execute(
-        "SELECT id, chunk_text FROM chunks ORDER BY embedding <-> %s::vector LIMIT %s",
-        (question_embedding, top_k)
-    )
+    # pgvector returns its own Vector type, not a plain sequence.
+    return {
+        cid: (embedding.to_list() if hasattr(embedding, "to_list") else list(embedding))
+        for cid, embedding in rows
+    }
 
-    results = cursor.fetchall()
-    cursor.close()
-    conn.close()
 
-    return results
-
-def search_keyword_chunks(question:str, top_k:int=6) -> list[tuple[str, str]]:
+def count_chunks(session_id: str | None = None) -> dict:
+    """Corpus size, split into shared demo chunks and this session's uploads."""
     conn = get_connection()
-    cursor = conn.cursor()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT count(*) FILTER (WHERE session_id IS NULL),
+                       count(*) FILTER (WHERE session_id = %s)
+                FROM chunks
+                """,
+                (session_id,),
+            )
+            demo, session = cursor.fetchone()
+    finally:
+        conn.close()
 
-    cursor.execute(
-        """
-        SELECT id, chunk_text FROM chunks
-        WHERE to_tsvector('english', chunk_text) @@ plainto_tsquery('english', %s)
-        ORDER BY ts_rank(to_tsvector('english', chunk_text), plainto_tsquery('english', %s)) DESC
-        LIMIT %s
-        """,
-        (question, question, top_k)
-    )
-
-    results = cursor.fetchall()
-    cursor.close()
-    conn.close()
-
-    return results
-
-
-def combine_with_rrf(vector_results: list[tuple], keyword_results: list[tuple], k: int = 60, top_k: int = 6) -> list[str]:
-    vector_ranks = {doc_id: rank for rank, (doc_id, _) in enumerate(vector_results, start=1)}
-    keyword_ranks = {doc_id: rank for rank, (doc_id, _) in enumerate(keyword_results, start=1)}
-
-    chunk_texts = {doc_id: chunk_text for doc_id, chunk_text in vector_results + keyword_results}
-
-    unique_chunk_ids = set(vector_ranks.keys()) | set(keyword_ranks.keys())
-
-    rrf_scores = {}
-    for doc_id in unique_chunk_ids:
-        score = 0
-        if doc_id in vector_ranks:
-            score += 1 / (k + vector_ranks[doc_id])
-        if doc_id in keyword_ranks:
-            score += 1 / (k + keyword_ranks[doc_id])
-        rrf_scores[doc_id] = score
-
-    sorted_chunks = sorted(rrf_scores.items(), key=lambda item: item[1], reverse=True)
-
-    top_chunks = [(doc_id, chunk_texts[doc_id]) for doc_id, _ in sorted_chunks[:top_k]]
-    
-    return top_chunks
+    return {"demo_chunks": demo, "session_chunks": session}

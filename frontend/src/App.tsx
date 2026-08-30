@@ -1,157 +1,165 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import './app.css'
+import { api, type AskResponse } from './api'
+import { Hero, type Mode, type Source } from './components/Hero'
+import { Walkthrough } from './components/Scenes'
+import { Upload } from './components/Upload'
 
-const API_BASE = 'http://localhost:8000'
+type Theme = 'light' | 'dark' | 'system'
 
-interface Verification {
-  grounded: boolean
-  issue: string
-  reasoning: string
+function useTheme() {
+  const [theme, setTheme] = useState<Theme>(() => {
+    try {
+      return (localStorage.getItem('rag-theme') as Theme) ?? 'system'
+    } catch {
+      return 'system'
+    }
+  })
+
+  useEffect(() => {
+    const root = document.documentElement
+    if (theme === 'system') root.removeAttribute('data-theme')
+    else root.setAttribute('data-theme', theme)
+    try {
+      localStorage.setItem('rag-theme', theme)
+    } catch {
+      /* storage blocked; the choice just won't persist */
+    }
+  }, [theme])
+
+  return [theme, setTheme] as const
 }
 
-interface Trace {
-  vector_chunk_ids: number[]
-  keyword_chunk_ids: number[]
-  fused_chunk_ids: number[]
-  reranked_chunk_ids: number[]
-  first_answer: string
-  verification: Verification
-  retried: boolean
-}
-
-interface AskResponse {
-  answer: string
-  top_chunk_ids: number[]
-  trace: Trace
-}
-
-function App() {
-  const [file, setFile] = useState<File | null>(null)
-  const [uploadStatus, setUploadStatus] = useState('')
-  const [uploading, setUploading] = useState(false)
-
-  const [question, setQuestion] = useState('')
-  const [asking, setAsking] = useState(false)
+export default function App() {
+  const [theme, setTheme] = useTheme()
+  const [mode, setMode] = useState<Mode>('idle')
   const [result, setResult] = useState<AskResponse | null>(null)
-  const [showTrace, setShowTrace] = useState(false)
-  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  // Which document the questions target, and its name for the ask panel.
+  const [source, setSource] = useState<Source>('demo')
+  const [documentName, setDocumentName] = useState<string | null>(null)
+  const [documentId, setDocumentId] = useState<string | null>(null)
+  const [uploadedId, setUploadedId] = useState<string | null>(null)
+  // Every metric in the app sits behind this gate.
+  const [revealed, setRevealed] = useState(false)
+  const abortRef = useRef<AbortController | null>(null)
 
-  const handleUpload = async () => {
-    if (!file) return
-    setUploading(true)
-    setUploadStatus('')
-    setError('')
+  useEffect(() => () => abortRef.current?.abort(), [])
 
-    const formData = new FormData()
-    formData.append('file', file)
+  const ask = useCallback(async (question: string) => {
+    abortRef.current?.abort()
+    const controller = new AbortController()
+    abortRef.current = controller
 
-    try {
-      const res = await fetch(`${API_BASE}/documents`, { method: 'POST', body: formData })
-      if (!res.ok) throw new Error(`Upload failed: ${res.status}`)
-      const data = await res.json()
-      setUploadStatus(`Uploaded — ${data.chunks_created} chunks created.`)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Upload failed')
-    } finally {
-      setUploading(false)
-    }
-  }
-
-  const handleAsk = async () => {
-    if (!question.trim()) return
-    setAsking(true)
-    setError('')
+    setLoading(true)
+    setError(null)
     setResult(null)
-
+    setRevealed(false)
     try {
-      const res = await fetch(`${API_BASE}/ask`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question }),
-      })
-      if (!res.ok) throw new Error(`Request failed: ${res.status}`)
-      const data: AskResponse = await res.json()
-      setResult(data)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Request failed')
+      setResult(await api.ask(question, documentId, controller.signal))
+    } catch (e) {
+      if ((e as Error)?.name === 'AbortError') return
+      setError(e instanceof Error ? e.message : 'Something went wrong')
     } finally {
-      setAsking(false)
+      if (!controller.signal.aborted) setLoading(false)
     }
-  }
+  }, [documentId])
+
+  /** Clear the answer and walkthrough so the ask panel can render again. */
+  const askAnother = useCallback(() => {
+    abortRef.current?.abort()
+    setResult(null)
+    setRevealed(false)
+    setError(null)
+    setMode('ask')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [])
+
+  const reveal = useCallback(() => {
+    setRevealed(true)
+    // Wait a frame so the section exists before scrolling to it.
+    requestAnimationFrame(() => {
+      document.getElementById('walkthrough')?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'auto'
+          : 'smooth',
+        block: 'start',
+      })
+    })
+  }, [])
+
+  const cycleTheme = () =>
+    setTheme(theme === 'system' ? 'light' : theme === 'light' ? 'dark' : 'system')
 
   return (
-    <div style={{ maxWidth: 700, margin: '0 auto', padding: 24, fontFamily: 'sans-serif' }}>
-      <h1>RAG Handbook Q&A</h1>
+    <>
+      <button
+        className="theme-toggle"
+        onClick={cycleTheme}
+        aria-label={`Theme: ${theme}. Click to change.`}
+        title={`Theme: ${theme}`}
+      >
+        <span aria-hidden="true">
+          {theme === 'light' ? '☀' : theme === 'dark' ? '☾' : '◐'}
+        </span>
+      </button>
 
-      <section style={{ marginBottom: 32 }}>
-        <h2>1. Upload a document</h2>
-        <input type="file" accept="application/pdf" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
-        <button onClick={handleUpload} disabled={!file || uploading}>
-          {uploading ? 'Uploading...' : 'Upload'}
-        </button>
-        {uploadStatus && <p>{uploadStatus}</p>}
-      </section>
+      <Hero
+        mode={mode}
+        setMode={(m) => {
+          if (m === 'ask' && mode === 'idle') {
+            setSource('demo')
+            setDocumentId(null)
+          }
+          setMode(m)
+        }}
+        source={source}
+        documentName={documentName}
+        onAsk={ask}
+        loading={loading}
+        result={result}
+        error={error}
+        onReveal={reveal}
+        revealed={revealed}
+        compact={mode === 'upload' || (!!result && revealed)}
+        onAskAnother={askAnother}
+        onUseDemo={() => {
+          setSource('demo')
+          setDocumentId(null)
+        }}
+        onUseOwn={() => {
+          if (!uploadedId) return
+          setSource('own')
+          setDocumentId(uploadedId)
+        }}
+      />
 
-      <section style={{ marginBottom: 32 }}>
-        <h2>2. Ask a question</h2>
-        <input
-          type="text"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          placeholder="Ask something about the document..."
-          style={{ width: '100%', padding: 8 }}
+      {loading ? (
+        <div className="running" role="status">
+          <span className="spinner" aria-hidden="true" />
+          Working through the pipeline...
+        </div>
+      ) : null}
+
+      {mode === 'upload' && !result && !loading ? (
+        <Upload
+          onIngested={(uploaded) => {
+            setSource('own')
+            setDocumentName(uploaded.filename)
+            setDocumentId(uploaded.document_id)
+            setUploadedId(uploaded.document_id)
+            setMode('ask')
+          }}
+          onBack={() => {
+            setSource('demo')
+            setDocumentId(null)
+            setMode('ask')
+          }}
         />
-        <button onClick={handleAsk} disabled={!question.trim() || asking}>
-          {asking ? 'Thinking...' : 'Ask'}
-        </button>
-      </section>
+      ) : null}
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      {result && (
-        <section>
-          <h2>Answer</h2>
-          <p>{result.answer}</p>
-
-          <div style={{ marginTop: 16 }}>
-            <span style={{
-              padding: '4px 10px',
-              borderRadius: 4,
-              background: result.trace.verification.grounded ? '#d4f8d4' : '#f8d4d4',
-              fontSize: 14,
-            }}>
-              {result.trace.verification.grounded ? '✓ Verified grounded' : '⚠ Flagged by verification'}
-            </span>
-            {result.trace.retried && (
-              <span style={{ marginLeft: 8, fontSize: 14, color: '#666' }}>
-                (regenerated after verification flagged an issue)
-              </span>
-            )}
-          </div>
-
-          <button onClick={() => setShowTrace(!showTrace)} style={{ marginTop: 16 }}>
-            {showTrace ? 'Hide' : 'Show'} retrieval trace
-          </button>
-
-          {showTrace && (
-            <div style={{ marginTop: 16, background: '#f5f5f5', padding: 16, borderRadius: 8 }}>
-              <p><strong>Vector search chunk ids:</strong> {result.trace.vector_chunk_ids.join(', ') || '(none)'}</p>
-              <p><strong>Keyword search chunk ids:</strong> {result.trace.keyword_chunk_ids.join(', ') || '(none)'}</p>
-              <p><strong>Fused (RRF) chunk ids:</strong> {result.trace.fused_chunk_ids.join(', ')}</p>
-              <p><strong>Reranked (final) chunk ids:</strong> {result.trace.reranked_chunk_ids.join(', ')}</p>
-              <p><strong>Verification issue:</strong> {result.trace.verification.issue}</p>
-              <p><strong>Verification reasoning:</strong> {result.trace.verification.reasoning}</p>
-              {result.trace.retried && (
-                <>
-                  <p><strong>First attempt (before retry):</strong></p>
-                  <p style={{ fontStyle: 'italic' }}>{result.trace.first_answer}</p>
-                </>
-              )}
-            </div>
-          )}
-        </section>
-      )}
-    </div>
+      {result && revealed ? <Walkthrough key={result.question} result={result} /> : null}
+    </>
   )
 }
-
-export default App

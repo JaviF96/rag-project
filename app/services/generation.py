@@ -40,11 +40,24 @@ def _call(create, **kwargs):
 
 
 def call_claude(prompt: str) -> str:
+    return call_claude_detailed(prompt)["text"]
+
+
+def call_claude_detailed(prompt: str) -> dict:
+    """Generate, returning the text alongside the token usage.
+
+    The input token count comes back on the response for free. Calling
+    count_tokens separately would be a second network round trip -- about 250ms
+    on a 5s request -- purely to display a number the response already carries,
+    and this count is the one actually billed.
+    """
     response = _call(client.messages.create, messages=[{"role": "user", "content": prompt}])
-    for block in response.content:
-        if block.type == "text":
-            return block.text
-    return ""
+    text = next((b.text for b in response.content if b.type == "text"), "")
+    return {
+        "text": text,
+        "input_tokens": response.usage.input_tokens,
+        "output_tokens": response.usage.output_tokens,
+    }
 
 
 def call_claude_structured(prompt: str, output_format: type[BaseModel]) -> BaseModel:

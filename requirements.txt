@@ -16,6 +16,9 @@ pgvector==0.5.0
 # Ingestion
 pypdf==6.16.1
 
+# Trace maths (PCA projection of embeddings for the pipeline visualiser)
+numpy==2.5.2
+
 # Models
 anthropic==0.122.0
 voyageai==0.5.0
