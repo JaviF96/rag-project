@@ -35,7 +35,8 @@ services:
   - type: web
     name: rag-inspector-web
     runtime: static
-    plan: free
+    # No `plan` key: static sites are free and unmetered, and Render rejects
+    # the field on this service type.
     rootDir: frontend
     buildCommand: npm ci && npm run build
     staticPublishPath: ./dist

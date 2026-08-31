@@ -418,6 +418,8 @@ hard stop.
 | First request after idle is very slow | Render free spins down, Neon free autosuspends | Expected on free tiers; a paid instance removes it |
 | Uploads always 429 | Per-session cap reached (5 docs / 3,000 chunks) | Raise `MAX_DOCUMENTS_PER_SESSION`, or run the cleanup workflow |
 | Blueprint rejected: `free not a valid plan for service type cron` | Render has no free cron tier | Already fixed — the cleanup is a GitHub Action, not a Render service |
+| Blueprint rejected: `no such plan free for service type web` on the static site | Static sites are free and unmetered; Render rejects a `plan` key on them | Already fixed — the static site declares no `plan` |
+| Static site build fails on `npm ci` | Lockfile out of sync with `package.json` | Run `npm install` locally and commit `package-lock.json` |
 | Answers cite the handbook for your own document | Frontend didn't send `document_id` | Re-upload; scoping is set when the upload completes |
 
 ## Rolling back
