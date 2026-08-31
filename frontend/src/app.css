@@ -140,11 +140,23 @@
 .btn-primary:active:not(:disabled) { transform: translateY(0) scale(0.985); }
 .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
 
-.suggestions { display: flex; flex-wrap: wrap; gap: 8px; }
+.suggestions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  /* Sized so the longest prompt still sits on one line in Montserrat. */
+  max-width: 820px;
+}
+/* Below this the columns get too narrow for the longest prompt to stay on one
+   line, so drop to a single column rather than letting the pills wrap. */
+@media (width <= 820px) {
+  .suggestions { grid-template-columns: 1fr; }
+}
 
 .chip {
-  padding: 8px 14px;
+  padding: 10px 16px;
   font-size: 13px;
+  line-height: 1.45;
   color: var(--ink-2);
   background: var(--surface);
   border: 1px solid var(--hairline);

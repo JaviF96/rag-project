@@ -4,6 +4,7 @@
 
 # API
 fastapi==0.141.1
+slowapi==0.1.10
 uvicorn==0.52.3
 pydantic==2.13.4
 python-multipart==0.0.32
@@ -22,3 +23,7 @@ numpy==2.5.2
 # Models
 anthropic==0.122.0
 voyageai==0.5.0
+
+# Tests (dev only, but pinned here so CI matches local)
+pytest==9.1.1
+requests==2.34.2

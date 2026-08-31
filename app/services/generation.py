@@ -1,5 +1,5 @@
 import anthropic
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 
 MODEL = "claude-sonnet-5"
 
@@ -63,14 +63,27 @@ def call_claude_detailed(prompt: str) -> dict:
 def call_claude_structured(prompt: str, output_format: type[BaseModel]) -> BaseModel:
     """Ask Claude for a response constrained to output_format's schema.
 
-    The API enforces the schema server-side, so the result is always a valid
-    instance of output_format — there is no parse step that can fail.
+    The API enforces the schema, so the *shape* of a completed response is
+    guaranteed. Completion itself is not: if generation stops at max_tokens the
+    JSON is cut off mid-string and `messages.parse` raises a ValidationError.
+    Observed in practice on a degenerate question, where the verifier ran to the
+    token limit emitting repeated `]}` and took the whole request down with a
+    500. Translating it to LLMError lets verify_answer fail open instead.
     """
-    response = _call(
-        client.messages.parse,
-        messages=[{"role": "user", "content": prompt}],
-        output_format=output_format,
-    )
+    try:
+        response = _call(
+            client.messages.parse,
+            messages=[{"role": "user", "content": prompt}],
+            output_format=output_format,
+        )
+    except ValidationError as e:
+        raise LLMError(
+            "Claude's structured response was truncated or unparseable "
+            "(likely hit max_tokens)."
+        ) from e
+
     if response.parsed_output is None:
         raise LLMError(f"Claude returned no structured output (stop_reason={response.stop_reason}).")
+    if response.stop_reason == "max_tokens":
+        raise LLMError("Claude's structured response was cut off at max_tokens.")
     return response.parsed_output

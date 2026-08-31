@@ -1,7 +1,10 @@
 import os
+import threading
+from contextlib import contextmanager
 
 import psycopg2
 from pgvector.psycopg2 import register_vector
+from psycopg2 import pool as pg_pool
 
 # Visibility rule shared by both searches: the demo corpus (session_id IS NULL)
 # is visible to everyone, plus whatever the current session uploaded. Without
@@ -20,10 +23,65 @@ def _scope(document_id: str | None) -> tuple[str, list]:
     return _VISIBLE, []
 
 
+# A single /ask previously opened three separate connections (vector search,
+# keyword search, embedding fetch). Against a managed database each of those is
+# a fresh TCP + TLS handshake on the request's critical path, and the pattern
+# scales concurrency straight into the provider's connection cap. The pool is
+# threaded because the FastAPI routes are sync `def`, so they run in the
+# threadpool rather than on the event loop.
+_pool: pg_pool.ThreadedConnectionPool | None = None
+_pool_lock = threading.Lock()
+
+
+def _get_pool() -> pg_pool.ThreadedConnectionPool:
+    global _pool
+    if _pool is None:
+        with _pool_lock:
+            if _pool is None:
+                dsn = os.environ.get("DATABASE_URL")
+                if not dsn:
+                    raise RuntimeError("DATABASE_URL is not set.")
+                _pool = pg_pool.ThreadedConnectionPool(
+                    minconn=int(os.environ.get("DB_POOL_MIN", 1)),
+                    maxconn=int(os.environ.get("DB_POOL_MAX", 10)),
+                    dsn=dsn,
+                )
+    return _pool
+
+
+@contextmanager
 def get_connection():
-    conn = psycopg2.connect(os.environ.get("DATABASE_URL"))
-    register_vector(conn)
-    return conn
+    """Borrow a pooled connection, returning it even on failure.
+
+    A connection that errored is discarded rather than returned to the pool, so
+    a broken socket can't be handed to the next caller.
+    """
+    pool = _get_pool()
+    conn = pool.getconn()
+    try:
+        register_vector(conn)
+        yield conn
+    except Exception:
+        pool.putconn(conn, close=True)
+        raise
+    else:
+        pool.putconn(conn)
+
+
+def close_pool() -> None:
+    """Release every pooled connection (called on application shutdown)."""
+    global _pool
+    if _pool is not None:
+        _pool.closeall()
+        _pool = None
+
+
+def check_connection() -> None:
+    """Raise if the database is unreachable. Used by the readiness probe."""
+    with get_connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
 
 
 def save_chunks(
@@ -32,8 +90,7 @@ def save_chunks(
     embeddings: list[list[float]],
     session_id: str | None = None,
 ) -> None:
-    conn = get_connection()
-    try:
+    with get_connection() as conn:
         with conn.cursor() as cursor:
             for index, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
                 cursor.execute(
@@ -47,8 +104,6 @@ def save_chunks(
                     (document_id, index, chunk, embedding, session_id),
                 )
         conn.commit()
-    finally:
-        conn.close()
 
 
 def search_similar_chunks(
@@ -63,8 +118,7 @@ def search_similar_chunks(
     throws away the only evidence of *why* a chunk ranked where it did.
     """
     where, extra = _scope(document_id)
-    conn = get_connection()
-    try:
+    with get_connection() as conn:
         with conn.cursor() as cursor:
             cursor.execute(
                 f"""
@@ -78,8 +132,6 @@ def search_similar_chunks(
                 [question_embedding, session_id, *extra, top_k],
             )
             rows = cursor.fetchall()
-    finally:
-        conn.close()
 
     return [
         {
@@ -110,8 +162,7 @@ def search_keyword_chunks(
     sanitised of tsquery operators.
     """
     where, extra = _scope(document_id)
-    conn = get_connection()
-    try:
+    with get_connection() as conn:
         with conn.cursor() as cursor:
             cursor.execute(
                 f"""
@@ -129,8 +180,6 @@ def search_keyword_chunks(
                 [question, session_id, *extra, top_k],
             )
             rows = cursor.fetchall()
-    finally:
-        conn.close()
 
     return [
         {
@@ -195,15 +244,12 @@ def fetch_embeddings(chunk_ids: list[int]) -> dict[int, list[float]]:
     if not chunk_ids:
         return {}
 
-    conn = get_connection()
-    try:
+    with get_connection() as conn:
         with conn.cursor() as cursor:
             cursor.execute(
                 "SELECT id, embedding FROM chunks WHERE id = ANY(%s)", (list(chunk_ids),)
             )
             rows = cursor.fetchall()
-    finally:
-        conn.close()
 
     # pgvector returns its own Vector type, not a plain sequence.
     return {
@@ -212,10 +258,52 @@ def fetch_embeddings(chunk_ids: list[int]) -> dict[int, list[float]]:
     }
 
 
+def session_usage(session_id: str) -> dict:
+    """How much this session has already stored.
+
+    Used to enforce per-session ceilings so one visitor cannot fill the
+    database, and so the cost of embedding is bounded per browser.
+    """
+    with get_connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT count(DISTINCT document_id), count(*)
+                FROM chunks
+                WHERE session_id = %s
+                """,
+                (session_id,),
+            )
+            documents, chunks = cursor.fetchone()
+
+    return {"documents": documents or 0, "chunks": chunks or 0}
+
+
+def delete_expired_sessions(ttl_days: int) -> int:
+    """Drop session-scoped chunks older than the TTL. Returns rows removed.
+
+    The demo corpus has session_id IS NULL and is never touched. Without this
+    the table grows without bound, since nothing else ever deletes an upload.
+    """
+    with get_connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                """
+                DELETE FROM chunks
+                WHERE session_id IS NOT NULL
+                  AND created_at < now() - make_interval(days => %s)
+                """,
+                (ttl_days,),
+            )
+            removed = cursor.rowcount
+        conn.commit()
+
+    return removed
+
+
 def count_chunks(session_id: str | None = None) -> dict:
     """Corpus size, split into shared demo chunks and this session's uploads."""
-    conn = get_connection()
-    try:
+    with get_connection() as conn:
         with conn.cursor() as cursor:
             cursor.execute(
                 """
@@ -226,7 +314,5 @@ def count_chunks(session_id: str | None = None) -> dict:
                 (session_id,),
             )
             demo, session = cursor.fetchone()
-    finally:
-        conn.close()
 
     return {"demo_chunks": demo, "session_chunks": session}

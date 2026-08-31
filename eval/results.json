@@ -1,7 +1,7 @@
 [
   {
     "question": "How many vacation days does an employee accrue annually if they were hired in 2017?",
-    "answer": "Based on the context, an employee hired in 2017 would be on the **legacy PTO plan** (since they were hired before January 2019), assuming they have not voluntarily opted into FTO in writing.\n\nThe legacy PTO plan accrues at a rate of **2 days per month, totaling 24 days annually**. Note that under this plan, sick leave is tracked separately and not combined with this vacation/PTO allocation (per section 3.3, Extended Sick Leave).",
+    "answer": "An employee hired in 2017 would be on the **legacy PTO plan** (since they were hired before January 2019), which accrues at **2 days per month, totaling 24 days annually** — unless they voluntarily opted into the FTO plan in writing, in which case they would accrue 18 days annually instead.",
     "retrieval": {
       "full_recall": true,
       "recall": 1.0,
@@ -12,7 +12,7 @@
     },
     "judge": {
       "verdict": "correct",
-      "reasoning": "The system's answer matches the reference: employee hired in 2017 is on legacy PTO plan, accruing 2 days/month = 24 days annually, consistent with the pre-2019 cutoff logic."
+      "reasoning": "The system's answer matches the reference (Legacy PTO, 2 days/month, 24 days annually) and adds an accurate additional detail about the opt-in FTO alternative, which does not contradict the reference but supplements it correctly."
     },
     "stages": {
       "embed": {
@@ -292,13 +292,13 @@
       },
       "generate": {
         "model": "claude-sonnet-5",
-        "answer": "Based on the context, an employee hired in 2017 would be on the **legacy PTO plan** (since they were hired before January 2019), assuming they have not voluntarily opted into FTO in writing.\n\nThe legacy PTO plan accrues at a rate of **2 days per month, totaling 24 days annually**. Note that under this plan, sick leave is tracked separately and not combined with this vacation/PTO allocation (per section 3.3, Extended Sick Leave).",
-        "output_tokens": 292
+        "answer": "An employee hired in 2017 would be on the **legacy PTO plan** (since they were hired before January 2019), which accrues at **2 days per month, totaling 24 days annually** — unless they voluntarily opted into the FTO plan in writing, in which case they would accrue 18 days annually instead.",
+        "output_tokens": 155
       },
       "verify": {
         "grounded": true,
         "issue": "none",
-        "reasoning": "The answer's claims are all directly supported by the context: employees hired before January 2019 remain on the legacy PTO plan unless they opt into FTO in writing; the legacy plan accrues at 2 days/month (24 days annually); and sick leave is tracked separately per section 3.3 (Extended Sick Leave) rather than combined with vacation/PTO. An employee hired in 2017 would indeed fall under 'before January 2019.' No unsupported claims are made, and no information present in the context is incorrectly claimed to be missing."
+        "reasoning": "The answer correctly states that employees hired before January 2019 (2017 qualifies) remain on the legacy PTO plan accruing 2 days/month totaling 24 days annually, unless they voluntarily opt into FTO in writing, in which case they would accrue FTO at 1.5 days/month totaling 18 days annually. All these details are directly supported by the context. No unsupported claims or missed information are present."
       },
       "retry": {
         "occurred": false,
@@ -307,15 +307,15 @@
       }
     },
     "timings": {
-      "embed": 569.0,
-      "vector_search": 49.8,
-      "keyword_search": 42.8,
+      "embed": 559.3,
+      "vector_search": 24.9,
+      "keyword_search": 7.8,
       "fusion": 0.0,
-      "rerank": 218.5,
+      "rerank": 225.2,
       "prompt": 0.0,
-      "generate": 3316.7,
-      "verify": 3723.6,
-      "total": 7920.6
+      "generate": 2139.0,
+      "verify": 3700.0,
+      "total": 6656.3
     }
   },
   {
@@ -331,7 +331,7 @@
     },
     "judge": {
       "verdict": "correct",
-      "reasoning": "The system's answer matches the reference: up to 10% of base salary, paid each March, with additional accurate detail about performance dependency."
+      "reasoning": "The system's answer matches the reference: bonus is up to 10% of base salary, paid each March. The additional detail about depending on performance does not contradict the reference and adds accurate context."
     },
     "stages": {
       "embed": {
@@ -617,7 +617,7 @@
       "verify": {
         "grounded": true,
         "issue": "none",
-        "reasoning": "The context explicitly states: 'All full-time employees in good standing are eligible for the annual performance bonus, paid each March, equal to up to 10% of base salary depending on individual and company performance that year.' The generated answer accurately reflects this information without adding unsupported claims or omitting relevant details that were asked about (the bonus amount, timing, and basis)."
+        "reasoning": "The answer states the annual performance bonus is up to 10% of base salary depending on individual and company performance, paid each March. This is directly supported by the context: 'All full-time employees in good standing are eligible for the annual performance bonus, paid each March, equal to up to 10% of base salary depending on individual and company performance that year.' No unsupported claims are made, and the answer does not claim the context lacks any information."
       },
       "retry": {
         "occurred": false,
@@ -626,15 +626,15 @@
       }
     },
     "timings": {
-      "embed": 321.5,
-      "vector_search": 49.5,
-      "keyword_search": 51.6,
-      "fusion": 0.1,
-      "rerank": 344.0,
+      "embed": 198.7,
+      "vector_search": 51.2,
+      "keyword_search": 6.4,
+      "fusion": 0.0,
+      "rerank": 221.7,
       "prompt": 0.0,
-      "generate": 1285.5,
-      "verify": 3428.8,
-      "total": 5481.1
+      "generate": 1347.4,
+      "verify": 3198.6,
+      "total": 5024.1
     }
   },
   {
@@ -650,7 +650,7 @@
     },
     "judge": {
       "verdict": "correct",
-      "reasoning": "The system's answer matches the reference exactly in substance: part-time and contract employees are excluded from the annual bonus under any circumstances."
+      "reasoning": "The system's answer matches the reference: it states part-time (and contract) employees are excluded from the annual bonus under any circumstances, consistent with the reference answer."
     },
     "stages": {
       "embed": {
@@ -936,7 +936,7 @@
       "verify": {
         "grounded": true,
         "issue": "none",
-        "reasoning": "The context explicitly states 'Part-time and contract employees are not eligible for the annual bonus program under any circumstances.' The generated answer directly restates this fact accurately, with no unsupported claims or missed information."
+        "reasoning": "The context explicitly states: 'Part-time and contract employees are not eligible for the annual bonus program under any circumstances.' The generated answer directly restates this claim without adding unsupported information or missing any relevant details from the context."
       },
       "retry": {
         "occurred": false,
@@ -945,20 +945,20 @@
       }
     },
     "timings": {
-      "embed": 210.2,
-      "vector_search": 24.5,
-      "keyword_search": 42.5,
+      "embed": 201.3,
+      "vector_search": 51.6,
+      "keyword_search": 12.8,
       "fusion": 0.0,
-      "rerank": 222.1,
+      "rerank": 212.6,
       "prompt": 0.0,
-      "generate": 1284.7,
-      "verify": 2046.7,
-      "total": 3830.9
+      "generate": 1345.9,
+      "verify": 2047.3,
+      "total": 3871.7
     }
   },
   {
     "question": "Can someone on an active Performance Improvement Plan be considered for a mid-year promotion?",
-    "answer": "No — employees on an active PIP are not eligible for consideration in the mid-year promotion cycle until the PIP has been successfully closed by their manager.",
+    "answer": "No. According to the context, employees on an active PIP are not eligible for consideration in the mid-year promotion cycle until the PIP has been successfully closed by their manager.",
     "retrieval": {
       "full_recall": true,
       "recall": 1.0,
@@ -969,7 +969,7 @@
     },
     "judge": {
       "verdict": "correct",
-      "reasoning": "The system's answer matches the reference answer's core claim: employees on an active PIP are excluded from mid-year promotion consideration until the PIP is closed. The additional detail about the manager closing it does not contradict the reference and is a reasonable elaboration."
+      "reasoning": "The system's answer matches the reference: it states that employees on an active PIP are excluded from mid-year promotion consideration until the PIP is closed, which aligns with the reference answer's content (also implicitly covering exclusion from bonus, though not explicitly restated, the core question about promotion is correctly answered)."
     },
     "stages": {
       "embed": {
@@ -1249,13 +1249,13 @@
       },
       "generate": {
         "model": "claude-sonnet-5",
-        "answer": "No — employees on an active PIP are not eligible for consideration in the mid-year promotion cycle until the PIP has been successfully closed by their manager.",
-        "output_tokens": 50
+        "answer": "No. According to the context, employees on an active PIP are not eligible for consideration in the mid-year promotion cycle until the PIP has been successfully closed by their manager.",
+        "output_tokens": 55
       },
       "verify": {
         "grounded": true,
         "issue": "none",
-        "reasoning": "The context explicitly states that employees on an active PIP are not eligible for consideration in the mid-year promotion cycle until the PIP has been successfully closed by their manager. The generated answer directly restates this fact without adding unsupported claims or omitting relevant information from the context."
+        "reasoning": "The context explicitly states that 'Employees on an active PIP are not eligible for the annual performance bonus described in Section 2, nor for consideration in the mid-year promotion cycle, until the PIP has been successfully closed by their manager.' The generated answer directly reflects this statement without adding unsupported claims or omitting relevant information from the context regarding the specific question about mid-year promotion eligibility."
       },
       "retry": {
         "occurred": false,
@@ -1264,20 +1264,20 @@
       }
     },
     "timings": {
-      "embed": 204.7,
-      "vector_search": 47.5,
-      "keyword_search": 48.4,
-      "fusion": 0.1,
-      "rerank": 233.6,
+      "embed": 203.3,
+      "vector_search": 53.8,
+      "keyword_search": 13.2,
+      "fusion": 0.0,
+      "rerank": 220.8,
       "prompt": 0.0,
-      "generate": 1404.5,
-      "verify": 1940.2,
-      "total": 3879.1
+      "generate": 1478.6,
+      "verify": 2513.0,
+      "total": 4482.9
     }
   },
   {
     "question": "If an employee was hired in 2017 and is currently on an active PIP, how many time-off days do they get this year, and can they expect a bonus?",
-    "answer": "Based on the context:\n\n**Time-off days:** Since the employee was hired in 2017 (before January 2019), they are on the **Legacy PTO Plan**, unless they voluntarily opted into FTO in writing. Under the legacy plan, they accrue **2 days per month, totaling 24 days annually**.\n\n**Bonus eligibility:** No, they cannot expect a bonus this year. The context states that \"Employees on an active PIP are not eligible for the annual performance bonus described in Section 2... until the PIP has been successfully closed by their manager.\" Since the employee is currently on an active PIP, they are not eligible for the bonus until it is successfully closed.",
+    "answer": "Based on the context:\n\n**Time-off days:** Since this employee was hired in 2017 (before January 2019), they remain on the **Legacy PTO Plan**, unless they voluntarily opted into FTO in writing. Under the Legacy PTO Plan, they accrue **2 days per month, totaling 24 days annually**.\n\n**Bonus eligibility:** No, they cannot expect a bonus this year. The context states that \"Employees on an active PIP are not eligible for the annual performance bonus described in Section 2... until the PIP has been successfully closed by their manager.\" Since this employee is currently on an active PIP, they are excluded from bonus consideration until that PIP is successfully closed.",
     "retrieval": {
       "full_recall": true,
       "recall": 1.0,
@@ -1289,7 +1289,7 @@
     },
     "judge": {
       "verdict": "correct",
-      "reasoning": "The system's answer matches the reference: 24 days per year under legacy PTO, and no bonus while the PIP is active, with correct reasoning and additional detail that doesn't contradict the reference."
+      "reasoning": "The system's answer matches the reference: 24 days per year under Legacy PTO, and no bonus while on active PIP, with correct supporting rationale.  Both key facts align exactly with the reference answer."
     },
     "stages": {
       "embed": {
@@ -1569,13 +1569,13 @@
       },
       "generate": {
         "model": "claude-sonnet-5",
-        "answer": "Based on the context:\n\n**Time-off days:** Since the employee was hired in 2017 (before January 2019), they are on the **Legacy PTO Plan**, unless they voluntarily opted into FTO in writing. Under the legacy plan, they accrue **2 days per month, totaling 24 days annually**.\n\n**Bonus eligibility:** No, they cannot expect a bonus this year. The context states that \"Employees on an active PIP are not eligible for the annual performance bonus described in Section 2... until the PIP has been successfully closed by their manager.\" Since the employee is currently on an active PIP, they are not eligible for the bonus until it is successfully closed.",
-        "output_tokens": 217
+        "answer": "Based on the context:\n\n**Time-off days:** Since this employee was hired in 2017 (before January 2019), they remain on the **Legacy PTO Plan**, unless they voluntarily opted into FTO in writing. Under the Legacy PTO Plan, they accrue **2 days per month, totaling 24 days annually**.\n\n**Bonus eligibility:** No, they cannot expect a bonus this year. The context states that \"Employees on an active PIP are not eligible for the annual performance bonus described in Section 2... until the PIP has been successfully closed by their manager.\" Since this employee is currently on an active PIP, they are excluded from bonus consideration until that PIP is successfully closed.",
+        "output_tokens": 324
       },
       "verify": {
         "grounded": true,
         "issue": "none",
-        "reasoning": "The answer correctly applies the context's policy details: employees hired before January 2019 are on the Legacy PTO plan (2 days/month, 24 days annually) unless they opted into FTO, which matches the context's Section 3.2 description verbatim. It also correctly cites the PIP-related bonus ineligibility rule, quoting it accurately from the context. The specific facts about the employee's 2017 hire date and active PIP status are presumably given in the original question (not shown here) and are used consistently with the context's policies rather than fabricated. No claims contradict the context, and no information present in the context is falsely claimed to be missing."
+        "reasoning": "The policy details cited in the answer\\u2014Legacy PTO accrual of 2 days/month totaling 24 days annually for employees hired before January 2019, and the ineligibility for the annual performance bonus while on an active PIP until it is closed\\u2014are directly and accurately quoted/paraphrased from the provided context. The employee-specific facts (hired in 2017, currently on an active PIP) are presumably given in the original question rather than the context excerpt, and the answer correctly applies the context's policy rules to those facts without introducing any claims not supported by the context or omitting information that was present."
       },
       "retry": {
         "occurred": false,
@@ -1584,20 +1584,20 @@
       }
     },
     "timings": {
-      "embed": 237.4,
-      "vector_search": 61.6,
-      "keyword_search": 48.1,
-      "fusion": 0.1,
-      "rerank": 213.6,
+      "embed": 201.2,
+      "vector_search": 55.4,
+      "keyword_search": 9.8,
+      "fusion": 0.0,
+      "rerank": 212.9,
       "prompt": 0.0,
-      "generate": 2598.6,
-      "verify": 7060.9,
-      "total": 10220.6
+      "generate": 3770.5,
+      "verify": 6308.8,
+      "total": 10558.7
     }
   },
   {
     "question": "What does FTO stand for, and how many days does it provide compared to the legacy plan?",
-    "answer": "FTO stands for **Flexible Time Off**.\n\n**Comparison of days provided:**\n- **FTO**: Accrued at 1.5 days per month, totaling **18 days annually** for a full-time employee.\n- **Legacy PTO Plan**: Accrued at 2 days per month, totaling **24 days annually**.\n\nSo the legacy PTO plan provides 6 more days annually than FTO. Additionally, the legacy plan does not combine sick leave with vacation time (sick leave is tracked separately), whereas FTO may be used for vacation, personal matters, or short-term illness of less than three consecutive days.",
+    "answer": "FTO stands for **Flexible Time Off**.\n\n- **FTO** accrues at 1.5 days per month, totaling **18 days annually** for a full-time employee.\n- The **Legacy PTO Plan** accrues at 2 days per month, totaling **24 days annually**.\n\nSo the legacy plan provides 6 more days annually than FTO. Additionally, the legacy plan tracks sick leave separately, while FTO can be used for vacation, personal matters, or short-term illness of less than three consecutive days.",
     "retrieval": {
       "full_recall": true,
       "recall": 1.0,
@@ -1609,7 +1609,7 @@
     },
     "judge": {
       "verdict": "correct",
-      "reasoning": "The system correctly identifies FTO as Flexible Time Off, and matches the reference numbers exactly: 18 days/year (1.5/month) for FTO vs 24 days/year (2/month) for legacy PTO. Additional details provided are accurate elaborations, not contradictions."
+      "reasoning": "The system correctly identifies FTO as Flexible Time Off and provides the same figures as the reference: 18 days/year (1.5/month) for FTO vs. 24 days/year (2/month) for legacy PTO, matching the reference exactly, with additional accurate context."
     },
     "stages": {
       "embed": {
@@ -1889,13 +1889,13 @@
       },
       "generate": {
         "model": "claude-sonnet-5",
-        "answer": "FTO stands for **Flexible Time Off**.\n\n**Comparison of days provided:**\n- **FTO**: Accrued at 1.5 days per month, totaling **18 days annually** for a full-time employee.\n- **Legacy PTO Plan**: Accrued at 2 days per month, totaling **24 days annually**.\n\nSo the legacy PTO plan provides 6 more days annually than FTO. Additionally, the legacy plan does not combine sick leave with vacation time (sick leave is tracked separately), whereas FTO may be used for vacation, personal matters, or short-term illness of less than three consecutive days.",
-        "output_tokens": 205
+        "answer": "FTO stands for **Flexible Time Off**.\n\n- **FTO** accrues at 1.5 days per month, totaling **18 days annually** for a full-time employee.\n- The **Legacy PTO Plan** accrues at 2 days per month, totaling **24 days annually**.\n\nSo the legacy plan provides 6 more days annually than FTO. Additionally, the legacy plan tracks sick leave separately, while FTO can be used for vacation, personal matters, or short-term illness of less than three consecutive days.",
+        "output_tokens": 170
       },
       "verify": {
         "grounded": true,
         "issue": "none",
-        "reasoning": "All claims in the answer are directly supported by the context: FTO stands for Flexible Time Off, accrues at 1.5 days/month totaling 18 days annually, legacy PTO accrues at 2 days/month totaling 24 days annually, the legacy plan tracks sick leave separately, and FTO may be used for vacation, personal matters, or short-term illness under three days. The calculation that legacy PTO provides 6 more days than FTO (24-18=6) is a correct arithmetic inference from the stated figures. No unsupported claims are made, and no information present in the context is claimed to be missing."
+        "reasoning": "All claims in the answer are directly supported by the context: FTO stands for Flexible Time Off, accrues at 1.5 days/month totaling 18 days annually, Legacy PTO accrues at 2 days/month totaling 24 days annually, the arithmetic difference of 6 days is correct, legacy plan tracks sick leave separately, and FTO can be used for vacation, personal matters, or short-term illness under three days. No unsupported claims are made, and the answer does not claim the context lacks any information that is actually present."
       },
       "retry": {
         "occurred": false,
@@ -1904,20 +1904,20 @@
       }
     },
     "timings": {
-      "embed": 201.5,
-      "vector_search": 45.5,
-      "keyword_search": 56.0,
+      "embed": 199.6,
+      "vector_search": 55.2,
+      "keyword_search": 12.7,
       "fusion": 0.1,
-      "rerank": 220.6,
+      "rerank": 215.8,
       "prompt": 0.0,
-      "generate": 3259.0,
-      "verify": 2852.1,
-      "total": 6634.9
+      "generate": 3333.3,
+      "verify": 3450.8,
+      "total": 7267.6
     }
   },
   {
     "question": "What percentage does Meridian match for 401(k) contributions?",
-    "answer": "Meridian matches 401(k) contributions dollar-for-dollar up to 4% of an employee's base salary.",
+    "answer": "Meridian matches 401(k) contributions dollar-for-dollar up to 4% of an employee's base salary, with matching contributions vesting immediately and being deposited each pay period alongside the employee's own contribution.",
     "retrieval": {
       "full_recall": true,
       "recall": 1.0,
@@ -1928,7 +1928,7 @@
     },
     "judge": {
       "verdict": "correct",
-      "reasoning": "The system's answer matches the reference exactly: dollar-for-dollar match up to 4% of base salary."
+      "reasoning": "The system's answer states the match is dollar-for-dollar up to 4% of base salary, matching the reference answer's core fact. Additional details (vesting, deposit timing) are extra but not contradictory."
     },
     "stages": {
       "embed": {
@@ -2208,13 +2208,13 @@
       },
       "generate": {
         "model": "claude-sonnet-5",
-        "answer": "Meridian matches 401(k) contributions dollar-for-dollar up to 4% of an employee's base salary.",
-        "output_tokens": 39
+        "answer": "Meridian matches 401(k) contributions dollar-for-dollar up to 4% of an employee's base salary, with matching contributions vesting immediately and being deposited each pay period alongside the employee's own contribution.",
+        "output_tokens": 72
       },
       "verify": {
         "grounded": true,
         "issue": "none",
-        "reasoning": "The generated answer directly restates a sentence explicitly present in the context: 'Meridian matches 401(k) contributions dollar-for-dollar up to 4% of an employee's base salary.' This is fully supported by the context and does not omit or fabricate any information relevant to the claim made.'"
+        "reasoning": "The answer states that Meridian matches 401(k) contributions dollar-for-dollar up to 4% of base salary, with immediate vesting and deposits each pay period alongside employee contributions. This is directly supported by the context, which states verbatim: 'Meridian matches 401(k) contributions dollar-for-dollar up to 4% of an employee's base salary. Matching contributions vest immediately and are deposited each pay period alongside the employee's own contribution.' There are no unsupported claims and no missed information relevant to this specific question about 401(k) matching."
       },
       "retry": {
         "occurred": false,
@@ -2223,20 +2223,20 @@
       }
     },
     "timings": {
-      "embed": 196.2,
-      "vector_search": 42.4,
-      "keyword_search": 39.8,
-      "fusion": 0.0,
-      "rerank": 211.6,
+      "embed": 204.2,
+      "vector_search": 50.8,
+      "keyword_search": 6.4,
+      "fusion": 0.1,
+      "rerank": 212.9,
       "prompt": 0.0,
-      "generate": 1309.9,
-      "verify": 3232.2,
-      "total": 5032.2
+      "generate": 1577.0,
+      "verify": 3418.4,
+      "total": 5469.9
     }
   },
   {
     "question": "What does EAP actually stand for?",
-    "answer": "EAP stands for **Employee Assistance Program**, as explicitly stated in Section 8: \"the internal mentorship program, which pairs new hires... including the Employee Assistance Program (EAP) confidential counseling line.\"",
+    "answer": "The context does not provide the full expansion of \"EAP\" (it only refers to it as \"the company's EAP\" or \"Employee Assistance Program\" once — noting that it's mentioned as \"the Employee Assistance Program (EAP)\" in Section 8). Based on that reference, EAP stands for **Employee Assistance Program**.",
     "retrieval": {
       "full_recall": true,
       "recall": 1.0,
@@ -2247,7 +2247,7 @@
     },
     "judge": {
       "verdict": "correct",
-      "reasoning": "The system's answer correctly identifies EAP as 'Employee Assistance Program', matching the reference answer exactly, with additional supporting context."
+      "reasoning": "The system's final answer correctly identifies EAP as 'Employee Assistance Program', matching the reference answer, despite some unnecessary hedging in the explanation."
     },
     "stages": {
       "embed": {
@@ -2527,31 +2527,30 @@
       },
       "generate": {
         "model": "claude-sonnet-5",
-        "answer": "The context doesn't specify what \"EAP\" stands for—it only refers to it as \"the EAP\" or \"Employee Assistance Program\" without providing the full spelling-out of the acronym explicitly beyond that name mentioned once in Section 8 (\"Employee Assistance Program (EAP)\").",
-        "output_tokens": 97
+        "answer": "The context does not provide the full expansion of \"EAP\" (it only refers to it as \"the company's EAP\" or \"Employee Assistance Program\" once — noting that it's mentioned as \"the Employee Assistance Program (EAP)\" in Section 8). Based on that reference, EAP stands for **Employee Assistance Program**.",
+        "output_tokens": 107
       },
       "verify": {
-        "grounded": false,
-        "issue": "unsupported_claim",
-        "reasoning": "The context explicitly spells out the acronym: 'the internal mentorship program, which pairs new hires... including the Employee Assistance Program (EAP) confidential counseling line' in Section 8. This directly specifies that EAP stands for 'Employee Assistance Program.' The generated answer acknowledges this exact phrase but then contradictorily claims the context 'doesn't specify what EAP stands for,' which is factually incorrect—the context does specify it, even if only once. This self-contradictory and inaccurate framing constitutes an unsupported claim about what the context does not contain."
+        "grounded": true,
+        "issue": "none",
+        "reasoning": "The answer correctly identifies that EAP stands for Employee Assistance Program, citing Section 8 where it explicitly states 'the Employee Assistance Program (EAP) confidential counseling line.' This expansion is indeed present in the context, and the answer accurately notes this is the source of the full name. The answer's claim that the context only spells it out once (in Section 8) while otherwise referring to it as 'the company's EAP' is also accurate - the other context excerpts do only use the abbreviation 'EAP' without expansion. No unsupported claims are made, and the answer does not falsely claim information is missing that is actually present - it correctly locates and uses the one place where the full term appears."
       },
       "retry": {
-        "occurred": true,
-        "note": "Note: a previous attempt at this answer had an issue: The context explicitly spells out the acronym: 'the internal mentorship program, which pairs new hires... including the Employee Assistance Program (EAP) confidential counseling line' in Section 8. This directly specifies that EAP stands for 'Employee Assistance Program.' The generated answer acknowledges this exact phrase but then contradictorily claims the context 'doesn't specify what EAP stands for,' which is factually incorrect—the context does specify it, even if only once. This self-contradictory and inaccurate framing constitutes an unsupported claim about what the context does not contain.. Re-examine the context carefully before answering again.",
-        "final_answer": "EAP stands for **Employee Assistance Program**, as explicitly stated in Section 8: \"the internal mentorship program, which pairs new hires... including the Employee Assistance Program (EAP) confidential counseling line.\""
+        "occurred": false,
+        "note": null,
+        "final_answer": null
       }
     },
     "timings": {
-      "embed": 201.6,
-      "vector_search": 43.6,
-      "keyword_search": 30.4,
-      "fusion": 0.0,
-      "rerank": 211.5,
+      "embed": 211.0,
+      "vector_search": 51.4,
+      "keyword_search": 6.3,
+      "fusion": 0.1,
+      "rerank": 223.9,
       "prompt": 0.0,
-      "generate": 1834.4,
-      "verify": 6407.4,
-      "retry": 5450.7,
-      "total": 14179.7
+      "generate": 2992.4,
+      "verify": 3920.1,
+      "total": 7405.2
     }
   },
   {
@@ -2567,7 +2566,7 @@
     },
     "judge": {
       "verdict": "correct",
-      "reasoning": "The system's answer matches the reference exactly in content: formal reviews annually each October and informal check-ins quarterly, with an added minor detail (between employees and managers) that does not contradict the reference."
+      "reasoning": "The system's answer states formal reviews occur annually in October and informal check-ins are recommended quarterly, matching the reference answer exactly, with an added detail (between employees and managers) that does not conflict with the reference."
     },
     "stages": {
       "embed": {
@@ -2853,7 +2852,7 @@
       "verify": {
         "grounded": true,
         "issue": "none",
-        "reasoning": "The generated answer directly restates a sentence from the context verbatim: 'Formal performance reviews occur annually each October, with informal check-ins recommended on a quarterly basis between employees and their managers.' This is fully supported by the context and does not introduce any unsupported claims or omit relevant information that was requested."
+        "reasoning": "The generated answer directly quotes information from the context: 'Formal performance reviews occur annually each October, with informal check-ins recommended on a quarterly basis between employees and their managers.' This exact statement appears in the Performance Management section of the context. There are no unsupported claims and no missed information - the answer accurately reflects what is stated in the context.'"
       },
       "retry": {
         "occurred": false,
@@ -2862,20 +2861,20 @@
       }
     },
     "timings": {
-      "embed": 203.3,
-      "vector_search": 45.8,
-      "keyword_search": 29.3,
+      "embed": 196.6,
+      "vector_search": 54.2,
+      "keyword_search": 14.4,
       "fusion": 0.1,
-      "rerank": 227.1,
+      "rerank": 219.6,
       "prompt": 0.0,
-      "generate": 1397.3,
-      "verify": 3567.9,
-      "total": 5470.9
+      "generate": 1382.1,
+      "verify": 3281.8,
+      "total": 5149.0
     }
   },
   {
     "question": "Is the Expense Review Committee involved in performance reviews?",
-    "answer": "No. Based on the context, the Expense Review Committee is described only in relation to expense reimbursements — specifically, it meets on the first Monday of each month to evaluate expenses exceeding $2,000 in total. Performance reviews are handled separately by managers and People Operations, with no mention of involvement by the Expense Review Committee.",
+    "answer": "No, the Expense Review Committee is not involved in performance reviews. According to the context, the Expense Review Committee's role is to meet on the first Monday of each month to evaluate expense requests exceeding $2,000. Performance reviews are handled separately, involving managers and People Operations (particularly in relation to Performance Improvement Plans).",
     "retrieval": {
       "full_recall": true,
       "recall": 1.0,
@@ -2887,7 +2886,7 @@
     },
     "judge": {
       "verdict": "correct",
-      "reasoning": "The system correctly answers 'No' and provides matching details: the Expense Review Committee evaluates expenses over $2,000, and performance reviews are a separate process, consistent with the reference answer.'"
+      "reasoning": "The system's answer matches the reference: it correctly states the Expense Review Committee is unrelated to performance reviews, correctly describes its role (evaluating expenses over $2,000, monthly meetings), and notes performance reviews are a separate process. This aligns fully with the reference answer's key points."
     },
     "stages": {
       "embed": {
@@ -3167,13 +3166,13 @@
       },
       "generate": {
         "model": "claude-sonnet-5",
-        "answer": "No. Based on the context, the Expense Review Committee is described only in relation to expense reimbursements — specifically, it meets on the first Monday of each month to evaluate expenses exceeding $2,000 in total. Performance reviews are handled separately by managers and People Operations, with no mention of involvement by the Expense Review Committee.",
-        "output_tokens": 109
+        "answer": "No, the Expense Review Committee is not involved in performance reviews. According to the context, the Expense Review Committee's role is to meet on the first Monday of each month to evaluate expense requests exceeding $2,000. Performance reviews are handled separately, involving managers and People Operations (particularly in relation to Performance Improvement Plans).",
+        "output_tokens": 111
       },
       "verify": {
         "grounded": true,
         "issue": "none",
-        "reasoning": "The answer's claims align with the context: the Expense Review Committee is described only under section 6.1 as meeting on the first Monday of each month to evaluate expenses exceeding $2,000. Section 7 on Performance Management mentions managers and People Operations (for PIPs) with no mention of the Expense Review Committee. The answer accurately reflects this and does not introduce unsupported claims or miss information present in the context."
+        "reasoning": "The answer correctly states the Expense Review Committee's role (meeting first Monday of each month to evaluate requests exceeding $2,000), which matches the context. It correctly notes performance reviews involve managers and People Operations, particularly regarding PIPs, which is supported by Section 7. The claim that the Expense Review Committee is not involved in performance reviews is a reasonable inference since the context never mentions any connection between the two, and nothing in the context contradicts this. All stated facts are grounded in the context, and no information present in the context is claimed to be missing."
       },
       "retry": {
         "occurred": false,
@@ -3182,20 +3181,20 @@
       }
     },
     "timings": {
-      "embed": 196.1,
-      "vector_search": 27.3,
-      "keyword_search": 29.3,
+      "embed": 194.4,
+      "vector_search": 46.3,
+      "keyword_search": 4.9,
       "fusion": 0.0,
-      "rerank": 339.2,
+      "rerank": 246.1,
       "prompt": 0.0,
-      "generate": 1749.9,
-      "verify": 3784.8,
-      "total": 6126.7
+      "generate": 1806.4,
+      "verify": 4151.2,
+      "total": 6449.3
     }
   },
   {
     "question": "How many consecutive days can an employee work abroad before needing approval, and who approves longer stays?",
-    "answer": "Employees may work abroad for personal travel for up to 20 consecutive days per calendar year without needing approval. Extended stays beyond this threshold require prior written approval from both People Operations and Legal before travel begins.",
+    "answer": "Employees may work abroad for up to 20 consecutive days per calendar year for personal travel without needing additional approval. Extended stays beyond this threshold require prior written approval from both **People Operations** and **Legal** before travel begins.",
     "retrieval": {
       "full_recall": true,
       "recall": 1.0,
@@ -3206,7 +3205,7 @@
     },
     "judge": {
       "verdict": "correct",
-      "reasoning": "The system correctly states the 20-consecutive-day threshold and correctly identifies that longer stays require prior written approval from both People Operations and Legal. The only minor discrepancy is the reference specifies '20 days without extra tax documentation' while the system says 'without needing approval,' but this is a minor phrasing nuance that doesn't change the substantive answer to the question (the threshold and the approvers), so it is essentially correct."
+      "reasoning": "The system's answer states 20 consecutive days without extra approval and that longer stays require prior written approval from both People Operations and Legal, matching the reference answer's key facts. Minor additional details (per calendar year, personal travel) are reasonable elaborations that don't contradict the reference."
     },
     "stages": {
       "embed": {
@@ -3486,13 +3485,13 @@
       },
       "generate": {
         "model": "claude-sonnet-5",
-        "answer": "Employees may work abroad for personal travel for up to 20 consecutive days per calendar year without needing approval. Extended stays beyond this threshold require prior written approval from both People Operations and Legal before travel begins.",
-        "output_tokens": 71
+        "answer": "Employees may work abroad for up to 20 consecutive days per calendar year for personal travel without needing additional approval. Extended stays beyond this threshold require prior written approval from both **People Operations** and **Legal** before travel begins.",
+        "output_tokens": 77
       },
       "verify": {
         "grounded": true,
         "issue": "none",
-        "reasoning": "The answer accurately reflects the context: employees may travel abroad for personal reasons up to 20 consecutive days per calendar year without triggering additional tax residency documentation (the answer simplifies this to 'without needing approval,' which is consistent with the context stating no approval is needed under this threshold), and extended stays beyond 20 days require prior written approval from People Operations and Legal before travel begins. Both statements are directly supported by the context, with no unsupported claims or missed information."
+        "reasoning": "The answer states that employees may work abroad up to 20 consecutive days per calendar year without needing additional approval, and that extended stays beyond that require prior written approval from People Operations and Legal before travel begins. This matches the context exactly, which states the same threshold, approval requirement, and consequences for failing to obtain approval (though the answer omits the tax liability consequence, it does not misstate anything or claim absence of information). No unsupported claims are made and no information is falsely claimed to be missing."
       },
       "retry": {
         "occurred": false,
@@ -3501,20 +3500,20 @@
       }
     },
     "timings": {
-      "embed": 200.6,
-      "vector_search": 41.2,
-      "keyword_search": 27.8,
-      "fusion": 0.0,
-      "rerank": 225.5,
+      "embed": 208.1,
+      "vector_search": 55.7,
+      "keyword_search": 9.7,
+      "fusion": 0.1,
+      "rerank": 228.8,
       "prompt": 0.0,
-      "generate": 1505.2,
-      "verify": 3678.3,
-      "total": 5678.6
+      "generate": 1510.9,
+      "verify": 3113.7,
+      "total": 5127.1
     }
   },
   {
     "question": "In the event of a workplace death, how many bereavement days are affected employees entitled to, and is this automatic?",
-    "answer": "In the event of a workplace-related fatality, affected employees are entitled to 10 paid days of bereavement leave (extended from the standard 5 days). This extension is **not automatic** — People Operations coordinates directly with affected employees regarding this extension, and it is not applied automatically through standard leave request systems. Additionally, mandatory access to EAP counseling resources is provided during the affected period.",
+    "answer": "In the event of a workplace-related fatality, immediately affected team members are entitled to 10 paid bereavement days (extended from the standard 5 days outlined in Section 3), along with mandatory access to EAP counseling resources during the affected period.\n\nThis extension is **not automatic** — People Operations will coordinate directly with affected employees regarding this extension, as it is not applied automatically through standard leave request systems.",
     "retrieval": {
       "full_recall": true,
       "recall": 1.0,
@@ -3526,7 +3525,7 @@
     },
     "judge": {
       "verdict": "correct",
-      "reasoning": "The system's answer matches the reference: 10 paid days (extended from standard 5), and explicitly states it is not automatic, with People Operations coordinating directly. The additional detail about EAP counseling does not contradict the reference and adds accurate supplementary information."
+      "reasoning": "The system's answer states the entitlement is 10 paid bereavement days (extended from the standard 5), matching the reference. It also correctly states this is not automatic through standard leave systems and that People Operations coordinates directly with affected employees. The additional detail about EAP counseling is extra information not contradicting the reference. All key facts align with the reference answer."
     },
     "stages": {
       "embed": {
@@ -3539,42 +3538,42 @@
             "chunk_id": 38,
             "document_id": "demo-meridian-handbook",
             "chunk_index": 4,
-            "distance": 0.9884658460143565,
+            "distance": 0.9890978910794509,
             "rank": 1
           },
           {
             "chunk_id": 39,
             "document_id": "demo-meridian-handbook",
             "chunk_index": 5,
-            "distance": 1.0127616426527992,
+            "distance": 1.0134711094310924,
             "rank": 2
           },
           {
             "chunk_id": 46,
             "document_id": "demo-meridian-handbook",
             "chunk_index": 12,
-            "distance": 1.0203121307979925,
+            "distance": 1.0209337431643244,
             "rank": 3
           },
           {
             "chunk_id": 45,
             "document_id": "demo-meridian-handbook",
             "chunk_index": 11,
-            "distance": 1.0543557669666708,
+            "distance": 1.055070934532433,
             "rank": 4
           },
           {
             "chunk_id": 37,
             "document_id": "demo-meridian-handbook",
             "chunk_index": 3,
-            "distance": 1.1643021100132678,
+            "distance": 1.1648105035817866,
             "rank": 5
           },
           {
             "chunk_id": 40,
             "document_id": "demo-meridian-handbook",
             "chunk_index": 6,
-            "distance": 1.1951439433212923,
+            "distance": 1.1954943948611936,
             "rank": 6
           }
         ],
@@ -3806,13 +3805,13 @@
       },
       "generate": {
         "model": "claude-sonnet-5",
-        "answer": "In the event of a workplace-related fatality, affected employees are entitled to 10 paid days of bereavement leave (extended from the standard 5 days). This extension is **not automatic** — People Operations coordinates directly with affected employees regarding this extension, and it is not applied automatically through standard leave request systems. Additionally, mandatory access to EAP counseling resources is provided during the affected period.",
-        "output_tokens": 129
+        "answer": "In the event of a workplace-related fatality, immediately affected team members are entitled to 10 paid bereavement days (extended from the standard 5 days outlined in Section 3), along with mandatory access to EAP counseling resources during the affected period.\n\nThis extension is **not automatic** — People Operations will coordinate directly with affected employees regarding this extension, as it is not applied automatically through standard leave request systems.",
+        "output_tokens": 133
       },
       "verify": {
         "grounded": true,
         "issue": "none",
-        "reasoning": "The answer accurately reflects the context: standard bereavement leave (5 days per Section 3.4) is extended to 10 paid days for immediately affected team members in the case of a workplace-related fatality, the extension is not automatic and requires People Operations coordination, and mandatory EAP counseling access is provided. All these claims are directly supported by the context, and no information is misrepresented as missing."
+        "reasoning": "The answer states that in a workplace-related fatality, bereavement leave is extended to 10 paid days (from the standard 5 days per Section 3.4), EAP counseling is mandatory, and the extension is coordinated manually by People Operations rather than automatically through standard leave systems. All these claims are directly supported by the context: Section 9 states the extension to 10 paid days plus mandatory EAP access, and explicitly states it is not applied automatically and is coordinated by People Operations. The standard 5-day bereavement allowance is confirmed in Section 3.4. No unsupported claims are made, and no information present in the context is claimed to be missing."
       },
       "retry": {
         "occurred": false,
@@ -3821,20 +3820,20 @@
       }
     },
     "timings": {
-      "embed": 193.2,
-      "vector_search": 28.3,
-      "keyword_search": 19.2,
+      "embed": 211.0,
+      "vector_search": 51.7,
+      "keyword_search": 11.1,
       "fusion": 0.0,
-      "rerank": 217.4,
+      "rerank": 254.6,
       "prompt": 0.0,
-      "generate": 1673.5,
-      "verify": 3447.0,
-      "total": 5578.7
+      "generate": 1789.0,
+      "verify": 3781.4,
+      "total": 6099.0
     }
   },
   {
     "question": "When does the Expense Review Committee meet?",
-    "answer": "The Expense Review Committee meets on the first Monday of each month.",
+    "answer": "The Expense Review Committee meets on the first Monday of each month to evaluate larger requests (expenses exceeding $2,000 in total).",
     "retrieval": {
       "full_recall": true,
       "recall": 1.0,
@@ -3845,7 +3844,7 @@
     },
     "judge": {
       "verdict": "correct",
-      "reasoning": "The system's answer states the Expense Review Committee meets on the first Monday of each month, which exactly matches the reference answer's information, just phrased as a full sentence."
+      "reasoning": "The system's answer includes the exact correct information from the reference (first Monday of each month) plus additional consistent context, without contradicting the reference."
     },
     "stages": {
       "embed": {
@@ -4125,13 +4124,13 @@
       },
       "generate": {
         "model": "claude-sonnet-5",
-        "answer": "The Expense Review Committee meets on the first Monday of each month.",
-        "output_tokens": 23
+        "answer": "The Expense Review Committee meets on the first Monday of each month to evaluate larger requests (expenses exceeding $2,000 in total).",
+        "output_tokens": 47
       },
       "verify": {
         "grounded": true,
         "issue": "none",
-        "reasoning": "The context explicitly states that expenses exceeding $2,000 are escalated to the Expense Review Committee, which meets on the first Monday of each month to evaluate larger requests. The generated answer accurately reflects this fact without adding unsupported claims or omitting relevant information."
+        "reasoning": "The answer states that the Expense Review Committee meets on the first Monday of each month to evaluate larger requests (expenses exceeding $2,000 in total), which directly matches the context: 'Expenses exceeding $2,000 in total are escalated to the Expense Review Committee, which meets on the first Monday of each month to evaluate larger requests.' No unsupported claims are made, and no information is omitted or misrepresented as missing."
       },
       "retry": {
         "occurred": false,
@@ -4140,15 +4139,15 @@
       }
     },
     "timings": {
-      "embed": 200.3,
-      "vector_search": 31.9,
-      "keyword_search": 18.2,
+      "embed": 203.6,
+      "vector_search": 49.7,
+      "keyword_search": 11.0,
       "fusion": 0.0,
-      "rerank": 220.2,
+      "rerank": 226.3,
       "prompt": 0.0,
-      "generate": 1234.8,
-      "verify": 3187.8,
-      "total": 4893.4
+      "generate": 1498.1,
+      "verify": 2438.9,
+      "total": 4427.8
     }
   }
 ]

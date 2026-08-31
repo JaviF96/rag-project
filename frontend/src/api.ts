@@ -1,18 +1,29 @@
 const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://localhost:8000'
 
+const SESSION_KEY = 'rag-inspector-session'
+
+/**
+ * Per-tab id, used only when localStorage is unavailable.
+ *
+ * This MUST be generated per tab rather than being a fixed string. A constant
+ * would put every private-browsing and blocked-storage visitor into the same
+ * session, and since retrieval is scoped by session id they would all be able
+ * to read each other's uploaded documents.
+ */
+const fallbackId = crypto.randomUUID()
+
 /** Stable per-browser id so uploads stay scoped to this visitor. */
 export function sessionId(): string {
-  const KEY = 'rag-inspector-session'
   try {
-    let id = localStorage.getItem(KEY)
+    let id = localStorage.getItem(SESSION_KEY)
     if (!id) {
       id = crypto.randomUUID()
-      localStorage.setItem(KEY, id)
+      localStorage.setItem(SESSION_KEY, id)
     }
     return id
   } catch {
-    // Private mode / blocked storage: fall back to a per-tab id.
-    return 'ephemeral'
+    // Private mode / blocked storage: isolated, but only lasts this tab.
+    return fallbackId
   }
 }
 
@@ -87,13 +98,6 @@ export interface UploadResponse {
   document_id: string
   filename: string
   chunks_created: number
-  word_count: number
-  sample_chunks: { chunk_index: number; text: string }[]
-}
-
-export interface CorpusStatus {
-  demo_chunks: number
-  session_chunks: number
 }
 
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
@@ -128,8 +132,6 @@ export const api = {
     body.append('file', file)
     return request<UploadResponse>('/documents', { method: 'POST', body })
   },
-
-  corpus: () => request<CorpusStatus>('/corpus'),
 }
 
 export const STAGE_ORDER = [

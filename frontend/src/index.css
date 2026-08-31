@@ -32,7 +32,7 @@
   --critical:       #d03b3b;
   --warning:        #fab219;
 
-  --sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --sans: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Consolas, monospace;
 
   --r-sm: 5px;

@@ -3,12 +3,28 @@ import voyageai
 EMBEDDING_MODEL = "voyage-4"
 RERANK_MODEL = "rerank-2.5"
 
+# The Voyage API accepts at most this many texts per embed request; the SDK
+# declares it as voyageai.VOYAGE_EMBED_BATCH_SIZE but `client.embed` does not
+# split for you -- it forwards the list whole. Sending more returns an API
+# error, which previously surfaced as an unhandled 500 on any upload longer
+# than ~128 chunks (roughly 25 pages).
+EMBED_BATCH_SIZE = 128
+
 client = voyageai.Client()
 
 
 def embed_chunks(chunks: list[str]) -> list[list[float]]:
-    result = client.embed(chunks, model=EMBEDDING_MODEL, input_type="document")
-    return result.embeddings
+    """Embed every chunk, in batches the API will accept.
+
+    Order is preserved: batches are concatenated in sequence, so the returned
+    list lines up index-for-index with `chunks`.
+    """
+    embeddings: list[list[float]] = []
+    for start in range(0, len(chunks), EMBED_BATCH_SIZE):
+        batch = chunks[start : start + EMBED_BATCH_SIZE]
+        result = client.embed(batch, model=EMBEDDING_MODEL, input_type="document")
+        embeddings.extend(result.embeddings)
+    return embeddings
 
 
 def embed_question(question: str) -> list[float]:

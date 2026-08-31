@@ -3,11 +3,15 @@ import { useEffect, useRef, useState } from 'react'
 import type { AskResponse } from '../api'
 import { spring, springSoft, useMotionSafe } from '../motion'
 
+// Kept short enough to sit one line deep in a two-column grid. Each one still
+// exercises a different part of the pipeline: date inference, an acronym only
+// keyword search finds, a cross-section hop, and a claim the document never
+// makes (which is what trips self-verification).
 const SUGGESTIONS = [
-  'Can someone on an active PIP be considered for a mid-year promotion?',
-  'What does FTO stand for, and how many days does it give compared to the legacy plan?',
-  'How many vacation days does someone hired in 2017 accrue?',
-  'Is the Expense Review Committee involved in performance reviews?',
+  'How much time off does a 2017 hire accrue?',
+  'How does FTO compare to the legacy PTO plan?',
+  'Can someone on a PIP get a mid-year promotion?',
+  'Does the Expense Review Committee run reviews?',
 ]
 
 export type Mode = 'idle' | 'ask' | 'upload'
