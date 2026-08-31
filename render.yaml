@@ -55,11 +55,8 @@ services:
     schedule: "0 3 * * *"
     dockerCommand: python -m seed.cleanup_sessions
     envVars:
+      # Only Postgres is touched here -- no model APIs, so no keys.
       - key: DATABASE_URL
-        sync: false
-      - key: ANTHROPIC_API_KEY
-        sync: false
-      - key: VOYAGE_API_KEY
         sync: false
       - key: SESSION_TTL_DAYS
         value: "7"

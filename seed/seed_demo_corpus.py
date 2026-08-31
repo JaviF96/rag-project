@@ -7,7 +7,7 @@ duplicating them. Embeddings are recomputed at seed time so the JSON file
 stays readable and editable.
 """
 
-from dotenv import load_dotenv
+from dotenv import load_dotenv 
 
 load_dotenv()
 
@@ -16,7 +16,7 @@ import os
 from pathlib import Path
 
 from app.services.embedding import embed_chunks
-from app.services.storage import get_connection
+from app.services.storage import close_pool, get_connection
 
 # Fixed id so re-seeding is idempotent and the eval golden dataset can
 # reference this document by name.
@@ -32,8 +32,7 @@ def seed() -> int:
     print(f"Embedding {len(chunks)} chunks from {corpus['title']}...")
     embeddings = embed_chunks(chunks)
 
-    conn = get_connection()
-    try:
+    with get_connection() as conn:
         with conn.cursor() as cursor:
             cursor.execute("DELETE FROM chunks WHERE document_id = %s", (DEMO_DOCUMENT_ID,))
             for index, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
@@ -45,12 +44,14 @@ def seed() -> int:
                     (DEMO_DOCUMENT_ID, index, chunk, embedding),
                 )
         conn.commit()
-    finally:
-        conn.close()
 
     return len(chunks)
 
 
 if __name__ == "__main__":
-    count = seed()
+    try:
+        count = seed()
+    finally:
+        # Release pooled connections so the script exits promptly.
+        close_pool()
     print(f"Seeded {count} chunks as document '{DEMO_DOCUMENT_ID}' (shared corpus).")

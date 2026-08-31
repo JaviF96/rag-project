@@ -236,71 +236,180 @@ rather than failing their request; uploads, which need a real session, return
 
 ---
 
-# Part 2 — Runbook
+# Part 2 — Deployment runbook
 
-## 1. Database (Neon)
+Backend on Render (Docker), Postgres on Neon, frontend as a Render static site,
+plus a nightly cleanup cron. Roughly 30–45 minutes end to end.
 
-1. Create a Neon project. Copy the **pooled** connection string (the host
-   contains `-pooler`) and keep `?sslmode=require`.
-2. Apply the schema and seed the demo corpus:
+## Before you start
+
+You need: a GitHub repo with this code pushed, a Neon account, a Render account,
+and your two API keys.
+
+**The one ordering trap.** `VITE_API_BASE` is compiled into the frontend bundle
+at build time, and the API's `ALLOWED_ORIGINS` has to name the frontend. Each
+needs the other's URL. Render URLs are predictable — `https://<service-name>.onrender.com`
+— so with the names in `render.yaml` you can set both up front:
+
+| Variable | Value |
+|---|---|
+| `VITE_API_BASE` | `https://rag-inspector-api.onrender.com` |
+| `ALLOWED_ORIGINS` | `https://rag-inspector-web.onrender.com` |
+
+If either name is already taken globally, Render appends a suffix. Check the
+real URLs after step 3 and correct both if they differ.
+
+---
+
+## Step 1 — Database (Neon)
+
+1. Create a Neon project. Any region; pick one near your Render region.
+2. From the dashboard copy **both** connection strings:
+   - **Direct** (host has no `-pooler`) — used once, for schema and seeding.
+   - **Pooled** (host contains `-pooler`) — used by the app.
+3. Enable pgvector. Neon's SQL Editor, or the psql in step 2, will do it —
+   `schema.sql` starts with `CREATE EXTENSION IF NOT EXISTS vector;`.
+
+## Step 2 — Schema and demo corpus
+
+Run from your machine, pointed at Neon. Use the **direct** string here: DDL and
+`CREATE EXTENSION` are more reliable outside the connection pooler.
 
 ```bash
-psql "$DATABASE_URL" -f schema.sql
-DATABASE_URL="..." python -m seed.seed_demo_corpus
+# Windows PowerShell
+$env:DATABASE_URL = "postgresql://...neon.tech/neondb?sslmode=require"   # DIRECT
+
+psql $env:DATABASE_URL -f schema.sql        # or paste schema.sql into Neon's SQL Editor
+python -m seed.seed_demo_corpus
 ```
 
-`schema.sql` creates the `vector` extension, the `chunks` table, an HNSW index
-for vector search, a GIN index for full-text search, and a unique index on
-`(document_id, chunk_index)` so re-ingesting replaces rather than duplicates.
+The seed script re-embeds the 13 handbook chunks, so `VOYAGE_API_KEY` must be in
+your local `.env`. Expect `Seeded 13 chunks as document 'demo-meridian-handbook'`.
 
-## 2. Deploy
+Confirm:
 
-Push, then point Render at `render.yaml` (Blueprints → New Blueprint Instance).
-It creates the API, the static site and the cleanup cron.
+```sql
+SELECT count(*) FROM chunks WHERE session_id IS NULL;   -- 13
+SELECT indexname FROM pg_indexes WHERE tablename = 'chunks';
+-- expect chunks_pkey, chunks_embedding_hnsw, chunks_text_fts,
+--        chunks_session_id, chunks_document_id, chunks_document_chunk
+```
 
-Set these in the dashboard (all `sync: false`):
+If the HNSW index is missing, vector search silently falls back to a sequential
+scan — correct results, much slower as the table grows.
 
-| Service | Variable | Value |
+## Step 3 — Create the Render services
+
+Push to GitHub, then in Render: **New → Blueprint**, select the repo. It reads
+`render.yaml` and creates three services:
+
+| Service | Type | What it is |
 |---|---|---|
-| API + cron | `DATABASE_URL` | Neon pooled string |
-| API + cron | `ANTHROPIC_API_KEY` | |
-| API + cron | `VOYAGE_API_KEY` | |
-| API | `ALLOWED_ORIGINS` | the static site's URL |
-| Static site | `VITE_API_BASE` | the API's URL |
+| `rag-inspector-api` | Docker web service | The FastAPI backend |
+| `rag-inspector-web` | Static site | The built frontend |
+| `rag-inspector-cleanup` | Docker cron, 03:00 daily | Deletes expired uploads |
 
-Ordering note: `VITE_API_BASE` is **baked into the JavaScript bundle at build
-time**, so it cannot be changed without a rebuild. Deploy the API first, take
-its URL, then build the frontend. `ALLOWED_ORIGINS` points the other way, so
-expect to redeploy the API once after the static site exists.
+The first build will fail or the API will crash-loop until step 4 — that is
+expected, because `require_env()` refuses to start without its variables.
 
-## 3. Verify the deploy
+## Step 4 — Environment variables
+
+In the Render dashboard, set these (every one is `sync: false`, so none of them
+are in the repo):
+
+**`rag-inspector-api`**
+
+| Variable | Value |
+|---|---|
+| `DATABASE_URL` | Neon **pooled** string |
+| `ANTHROPIC_API_KEY` | your key |
+| `VOYAGE_API_KEY` | your key |
+| `ALLOWED_ORIGINS` | `https://rag-inspector-web.onrender.com` |
+| `ENVIRONMENT` | `production` (already set by the blueprint) |
+
+**`rag-inspector-web`**
+
+| Variable | Value |
+|---|---|
+| `VITE_API_BASE` | `https://rag-inspector-api.onrender.com` |
+
+**`rag-inspector-cleanup`** — `DATABASE_URL` only. The cleanup job talks to
+Postgres and nothing else, so it is deliberately not given the model API keys.
+
+Then redeploy both. If you changed `VITE_API_BASE` you must rebuild the static
+site — it is baked into the bundle, not read at runtime.
+
+## Step 5 — Verify the deploy
 
 ```bash
-curl https://<api>/health   # {"status":"ok"}          — process is up
-curl https://<api>/ready    # {"status":"ready",...}   — database reachable
+curl https://rag-inspector-api.onrender.com/health   # {"status":"ok"}
+curl https://rag-inspector-api.onrender.com/ready    # {"status":"ready","database":"ok"}
 ```
 
-Then in the browser: load the site, run a sample question, open **See how it
-works** and confirm all eight scenes render, and upload a PDF of at least 40
-pages — that last one is the B1 regression check.
+`/health` only proves the process started. `/ready` proves it can reach Postgres
+— that is the one that matters, and it is what Render's health check uses.
 
-Finally, confirm the limiter bites:
+Then in the browser:
+
+1. Load the site. Click **Use the sample document**, ask a sample question.
+2. Click **See how it works** and confirm all eight scenes render with real
+   numbers — especially scene 04, which should show chunks found by both
+   searches outranking chunks found by one.
+3. Upload a PDF of **at least 40 pages**. This is the B1 regression check: under
+   the old code anything past ~128 chunks returned a 500.
+4. Ask a question about the uploaded document and confirm the answer comes from
+   your document, not the handbook.
+
+Finally confirm the limiter bites — sequential requests won't trip the
+per-minute limit because each `/ask` takes several seconds, so send them at once:
 
 ```bash
-for i in $(seq 1 12); do
-  curl -s -o /dev/null -w "%{http_code} " -X POST https://<api>/ask \
-    -H 'Content-Type: application/json' -d '{"question":"test"}'
-done   # expect 200s then 429s
+seq 1 16 | xargs -P 16 -I{} curl -s -o /dev/null -w "%{http_code} " \
+  -X POST https://rag-inspector-api.onrender.com/ask \
+  -H 'Content-Type: application/json' -d '{"question":"test"}'
+# expect a mix of 200 and 429
 ```
 
-## 4. Operating it
+## Step 6 — Set spend caps
 
-- **Cost.** Roughly a cent per question. With the default limits one IP can
-  spend about $1/day. Anthropic and Voyage both support account-level spend
-  caps — set them; the rate limiter is a control, not a guarantee.
-- **Cleanup.** The nightly cron logs how many chunks it removed. If it stops
-  running, the table grows.
-- **Free-tier spin-down.** Render free instances sleep when idle; the first
-  request after a sleep pays a cold start on top of the ~5s pipeline.
-- **Logs.** Ingest events, rejected session ids, and every handled failure are
-  logged with context. Unhandled exceptions still produce a stack trace.
+Do this before sharing the URL. The rate limiter is a control, not a guarantee.
+
+- **Anthropic Console → Billing → spend limits.**
+- **Voyage dashboard → usage limits.**
+
+At roughly a cent per question and the default limits, a single IP can spend
+about $1/day. A dozen IPs is a dozen dollars. Caps at the provider are the only
+hard stop.
+
+---
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| API crash-loops on boot, logs name a variable | `require_env()` doing its job | Set the named variable, redeploy |
+| Browser console shows CORS errors | `ALLOWED_ORIGINS` doesn't exactly match the site's origin | Match scheme and host exactly, no trailing slash |
+| Frontend calls `localhost:8000` | `VITE_API_BASE` wasn't set at **build** time | Set it, then rebuild the static site |
+| `/ready` returns 503 | Wrong `DATABASE_URL`, or `sslmode=require` missing | Use the pooled string, check it from psql |
+| `relation "chunks" does not exist` | Step 2 skipped or run against a different database | Re-run `schema.sql` against the right one |
+| First request after idle is very slow | Render free spins down, Neon free autosuspends | Expected on free tiers; a paid instance removes it |
+| Uploads always 429 | Per-session cap reached (5 docs / 3,000 chunks) | Raise `MAX_DOCUMENTS_PER_SESSION`, or wait for the cron |
+| Answers cite the handbook for your own document | Frontend didn't send `document_id` | Re-upload; scoping is set when the upload completes |
+
+## Rolling back
+
+Render keeps every previous deploy: **service → Events → Rollback**. The
+database is unaffected by an application rollback. Nothing in this codebase runs
+destructive migrations on boot — `schema.sql` is applied by hand and is
+idempotent (`IF NOT EXISTS` throughout).
+
+## After it's live
+
+- Watch the cleanup cron's logs for the first few nights; it reports how many
+  chunks it removed. If it stops running, the table grows without bound.
+- `eval/results.json` is the committed baseline. Re-run `python -m eval.run_eval`
+  locally after any pipeline change and compare — it holds at 13/13 recall,
+  13/13 correct, mean MRR 0.962.
+- Every tuning knob (limits, TTL, pool size) is an environment variable listed in
+  `.env.example`. Changing one on Render needs only a restart, not a rebuild —
+  except the frontend's `VITE_API_BASE`.
