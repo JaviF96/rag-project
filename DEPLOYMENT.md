@@ -239,7 +239,12 @@ rather than failing their request; uploads, which need a real session, return
 # Part 2 — Deployment runbook
 
 Backend on Render (Docker), Postgres on Neon, frontend as a Render static site,
-plus a nightly cleanup cron. Roughly 30–45 minutes end to end.
+plus a nightly cleanup job on GitHub Actions. Roughly 30–45 minutes end to end.
+
+**Why the cleanup isn't a Render cron:** Render has no free plan for cron
+services, so the blueprint would be rejected. GitHub Actions runs it for free and
+is the better home anyway — it doesn't depend on the Render web service being
+awake, which a free instance isn't when it's been idle.
 
 ## Before you start
 
@@ -301,13 +306,15 @@ scan — correct results, much slower as the table grows.
 ## Step 3 — Create the Render services
 
 Push to GitHub, then in Render: **New → Blueprint**, select the repo. It reads
-`render.yaml` and creates three services:
+`render.yaml` and creates two services:
 
 | Service | Type | What it is |
 |---|---|---|
 | `rag-inspector-api` | Docker web service | The FastAPI backend |
 | `rag-inspector-web` | Static site | The built frontend |
-| `rag-inspector-cleanup` | Docker cron, 03:00 daily | Deletes expired uploads |
+
+The nightly cleanup is a GitHub Actions workflow, configured separately in
+step 4b.
 
 The first build will fail or the API will crash-loop until step 4 — that is
 expected, because `require_env()` refuses to start without its variables.
@@ -333,8 +340,24 @@ are in the repo):
 |---|---|
 | `VITE_API_BASE` | `https://rag-inspector-api.onrender.com` |
 
-**`rag-inspector-cleanup`** — `DATABASE_URL` only. The cleanup job talks to
-Postgres and nothing else, so it is deliberately not given the model API keys.
+### 4b — The cleanup job (GitHub Actions)
+
+`.github/workflows/cleanup.yml` runs nightly at 03:00 UTC. It needs one
+repository secret:
+
+**Settings → Secrets and variables → Actions → New repository secret**
+
+| Name | Value |
+|---|---|
+| `DATABASE_URL` | Neon **pooled** connection string |
+
+It talks to Postgres and nothing else, so it is deliberately not given the model
+API keys.
+
+Verify it without waiting for the schedule: **Actions → Clean up expired
+sessions → Run workflow**. It should log
+`Removed 0 session chunk(s) older than 7 day(s).` — zero is correct on a fresh
+database and still proves the secret and connection work.
 
 Then redeploy both. If you changed `VITE_API_BASE` you must rebuild the static
 site — it is baked into the bundle, not read at runtime.
@@ -393,7 +416,8 @@ hard stop.
 | `/ready` returns 503 | Wrong `DATABASE_URL`, or `sslmode=require` missing | Use the pooled string, check it from psql |
 | `relation "chunks" does not exist` | Step 2 skipped or run against a different database | Re-run `schema.sql` against the right one |
 | First request after idle is very slow | Render free spins down, Neon free autosuspends | Expected on free tiers; a paid instance removes it |
-| Uploads always 429 | Per-session cap reached (5 docs / 3,000 chunks) | Raise `MAX_DOCUMENTS_PER_SESSION`, or wait for the cron |
+| Uploads always 429 | Per-session cap reached (5 docs / 3,000 chunks) | Raise `MAX_DOCUMENTS_PER_SESSION`, or run the cleanup workflow |
+| Blueprint rejected: `free not a valid plan for service type cron` | Render has no free cron tier | Already fixed — the cleanup is a GitHub Action, not a Render service |
 | Answers cite the handbook for your own document | Frontend didn't send `document_id` | Re-upload; scoping is set when the upload completes |
 
 ## Rolling back
@@ -405,8 +429,10 @@ idempotent (`IF NOT EXISTS` throughout).
 
 ## After it's live
 
-- Watch the cleanup cron's logs for the first few nights; it reports how many
-  chunks it removed. If it stops running, the table grows without bound.
+- Watch the cleanup workflow's runs for the first few nights (GitHub → Actions);
+  each run reports how many chunks it removed. If it stops running, the table
+  grows without bound. Note GitHub disables scheduled workflows on repositories
+  with no activity for 60 days — a commit or a manual run re-enables them.
 - `eval/results.json` is the committed baseline. Re-run `python -m eval.run_eval`
   locally after any pipeline change and compare — it holds at 13/13 recall,
   13/13 correct, mean MRR 0.962.

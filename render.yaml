@@ -3,6 +3,11 @@
 #
 # The database is Neon rather than a Render Postgres, because pgvector plus a
 # generous free tier is what this needs. Use Neon's POOLED connection string.
+#
+# The nightly session cleanup is NOT here: Render cron services have no free
+# plan. It runs as a GitHub Actions schedule instead
+# (.github/workflows/cleanup.yml), which only needs DATABASE_URL and does not
+# depend on the web service being awake.
 
 services:
   - type: web
@@ -43,20 +48,3 @@ services:
       - type: rewrite
         source: /*
         destination: /index.html
-
-  # Nothing else deletes uploaded documents, so without this the table grows
-  # without bound.
-  - type: cron
-    name: rag-inspector-cleanup
-    runtime: docker
-    dockerfilePath: ./Dockerfile
-    plan: free
-    region: frankfurt
-    schedule: "0 3 * * *"
-    dockerCommand: python -m seed.cleanup_sessions
-    envVars:
-      # Only Postgres is touched here -- no model APIs, so no keys.
-      - key: DATABASE_URL
-        sync: false
-      - key: SESSION_TTL_DAYS
-        value: "7"

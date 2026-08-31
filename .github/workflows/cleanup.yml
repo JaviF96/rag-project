@@ -1,0 +1,41 @@
+# Nightly deletion of expired session uploads.
+#
+# This lives here rather than in render.yaml because Render cron services have
+# no free plan. GitHub Actions is free for this, and it is also the more robust
+# home: it does not depend on the Render web service being awake, which a free
+# instance is not when it has been idle.
+#
+# Needs one repository secret: DATABASE_URL (Neon pooled connection string).
+# Settings -> Secrets and variables -> Actions -> New repository secret.
+
+name: Clean up expired sessions
+
+on:
+  schedule:
+    # 03:00 UTC daily. GitHub queues scheduled jobs, so expect some drift.
+    - cron: "0 3 * * *"
+  # Lets you run it by hand from the Actions tab, which is also how you verify
+  # the secret is set correctly without waiting for the schedule.
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Delete expired session chunks
+        env:
+          # The job only talks to Postgres, so it deliberately gets no model
+          # API keys.
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SESSION_TTL_DAYS: "7"
+        run: python -m seed.cleanup_sessions
