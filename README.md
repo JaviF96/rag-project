@@ -1,4 +1,4 @@
-# RAG Inspector
+# RAG Inspector - [Try it out](https://rag-inspector-web.onrender.com/)
 
 A retrieval-augmented generation pipeline over a PDF, built from scratch to actually understand how RAG works, then instrumented so a visitor can see every stage of how an answer was produced, not just the final answer.
 
