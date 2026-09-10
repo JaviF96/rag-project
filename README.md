@@ -33,7 +33,7 @@ it runs last, on a handful of candidates rather than thousands.
 
 ## The build, and what actually happened
 
-# Week 1 — building the first working version
+# Week 1 - building the first working version
 
 I set up a local FastAPI project with a Postgres database running in Docker, using the pgvector extension to store embeddings. I built two endpoints. The first takes a PDF, pulls the text out of it, splits that text into chunks, sends each chunk to Voyage to get an embedding, and saves the chunk text and its embedding in the database. The second takes a question, embeds it the same way, searches the database for the closest matching chunks, builds a prompt out of those chunks plus the question, and sends that to Claude to get an answer.
 
@@ -41,7 +41,7 @@ I deliberately didn't use LangChain or LlamaIndex for any of this. I wanted to w
 
 By the end of the week I had a working pipeline. You could upload a document, ask a real question about it, and get an answer that was actually grounded in what you uploaded.
 
-# Week 2 — testing whether retrieval actually held up
+# Week 2 - testing whether retrieval actually held up
 
 My first test document was only a couple of paragraphs long, and it passed every question I asked it. That was itself a problem. The document just wasn't hard enough to expose anything. So I built a fictional company handbook specifically designed to trip up naive retrieval. It had a time off policy that gave different numbers of days depending on when someone was hired, a bonus exclusion mentioned in a section with no link back to where eligibility was originally described, an acronym (EAP) that got used four separate times but only spelled out once, and a policy exception sitting in a completely different section from the general rule it overrode.
 
@@ -51,11 +51,11 @@ The keyword half of hybrid search taught me something I hadn't expected. I built
 
 Reciprocal Rank Fusion turned up two bugs in my own code before it turned up anything interesting in the actual results. One was an off by one error, since enumerate() starts counting at zero and the formula assumes ranks start at one. The other was a scoring mistake that gave partial credit to a chunk that was missing from one of the two lists entirely, when it should have gotten nothing. Once those were fixed, reranking earned its place by fixing a genuine multi hop question, correctly dropping a chunk that only said which policy applied in favor of the chunk that actually gave the number.
 
-# Week 3 — building real evidence
+# Week 3 - building real evidence
 
 Partway through building this I argued that an LLM judge was pointless. My reasoning was that if retrieval finds the right chunk, generation should always get the answer right, so why bother checking both separately. A counterexample showed up almost right away. A question asking what "EAP" stands for retrieved the correct chunk in first position, with the definition written out in plain text inside it, and the model still answered that the context didn't explicitly state what EAP stands for. Retrieval was correct and generation still failed, and there was no way I would have caught that by only checking which chunk ids came back. That result settled the argument for me.
 
-# Week 4 — adding self verification, and finding its limits
+# Week 4 - adding self verification, and finding its limits
 
 The verification step exists because of the EAP finding. After generating an answer, a second pass checks whether it's actually grounded in what was retrieved, and if not, the system regenerates once. Running the exact same EAP question again confirmed it worked. The flagged answer got replaced with the correct one.
 
